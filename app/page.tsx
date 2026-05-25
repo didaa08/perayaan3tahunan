@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 export default function Home() {
 
-  // LOCK WEBSITE MANUAL
+  // LOCK WEBSITE
   const isUnlocked = false;
 
   const targetDate = new Date("2026-06-01T23:59:59");
@@ -69,15 +69,20 @@ export default function Home() {
 
   }, []);
 
-  // MUSIC AUTOPLAY
+  // AUTOPLAY MUSIC
   useEffect(() => {
 
-    const playMusic = async () => {
+    const audio = audioRef.current;
+
+    if (!audio) return;
+
+    audio.volume = 0.35;
+
+    const playAudio = async () => {
 
       try {
-        audioRef.current!.volume = 0.35;
 
-        await audioRef.current?.play();
+        await audio.play();
 
       } catch (err) {
 
@@ -87,34 +92,49 @@ export default function Home() {
 
     };
 
-    playMusic();
+    playAudio();
 
-    // FALLBACK
-    const unlockAudio = async () => {
+    // FALLBACK FOR MOBILE / CHROME
+    const handleFirstInteraction = async () => {
 
       try {
 
-        await audioRef.current?.play();
-
-        document.removeEventListener(
-          "click",
-          unlockAudio
-        );
+        await audio.play();
 
       } catch {}
 
+      window.removeEventListener(
+        "click",
+        handleFirstInteraction
+      );
+
+      window.removeEventListener(
+        "touchstart",
+        handleFirstInteraction
+      );
+
     };
 
-    document.addEventListener(
+    window.addEventListener(
       "click",
-      unlockAudio
+      handleFirstInteraction
+    );
+
+    window.addEventListener(
+      "touchstart",
+      handleFirstInteraction
     );
 
     return () => {
 
-      document.removeEventListener(
+      window.removeEventListener(
         "click",
-        unlockAudio
+        handleFirstInteraction
+      );
+
+      window.removeEventListener(
+        "touchstart",
+        handleFirstInteraction
       );
 
     };
@@ -130,8 +150,8 @@ export default function Home() {
         ref={audioRef}
         autoPlay
         loop
+        playsInline
         preload="auto"
-        className="hidden"
       >
         <source
           src="/music/bayangkan.mp3"
@@ -149,7 +169,7 @@ export default function Home() {
         }}
       />
 
-      {/* DARK OVERLAY */}
+      {/* OVERLAY */}
       <div className="absolute inset-0 bg-black/65" />
 
       {/* GLOW */}
@@ -199,7 +219,7 @@ export default function Home() {
 
         </div>
 
-        {/* LOCKED BUTTON */}
+        {/* LOCK BUTTON */}
         {isUnlocked ? (
 
           <a
