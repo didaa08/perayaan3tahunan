@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 export default function Home() {
 
-  // LOCK WEBSITE
+  // MANUAL LOCK
   const isUnlocked = false;
 
   const targetDate = new Date("2026-06-01T23:59:59");
@@ -69,7 +69,7 @@ export default function Home() {
 
   }, []);
 
-  // MUSIC
+  // MUSIC ON FIRST CLICK
   useEffect(() => {
 
     const audio = audioRef.current;
@@ -78,21 +78,38 @@ export default function Home() {
 
     audio.volume = 0.35;
 
-    const tryPlay = async () => {
+    const startMusic = async () => {
 
       try {
 
         await audio.play();
 
+        window.removeEventListener(
+          "click",
+          startMusic
+        );
+
       } catch (err) {
 
-        console.log("Autoplay blocked");
+        console.log("Music blocked");
 
       }
 
     };
 
-    tryPlay();
+    window.addEventListener(
+      "click",
+      startMusic
+    );
+
+    return () => {
+
+      window.removeEventListener(
+        "click",
+        startMusic
+      );
+
+    };
 
   }, []);
 
@@ -100,10 +117,9 @@ export default function Home() {
 
     <main className="min-h-screen bg-black text-white relative overflow-hidden">
 
-      {/* AUDIO */}
+      {/* MUSIC */}
       <audio
         ref={audioRef}
-        autoPlay
         loop
       >
         <source
@@ -114,7 +130,7 @@ export default function Home() {
 
       {/* BACKGROUND */}
       <div
-        className="absolute inset-0 bg-cover"
+        className="absolute inset-0 bg-cover bg-center"
         style={{
           backgroundImage:
             "url('/images/bg.jpeg')",
@@ -198,6 +214,7 @@ export default function Home() {
     </main>
 
   );
+
 }
 
 function TimeCard({
