@@ -43,7 +43,7 @@ export default function Home() {
       <div
         className="absolute inset-0 bg-cover"
         style={{
-          backgroundImage: "url('/images/BG.jpeg')",
+          backgroundImage: "url('/images/bg.jpeg')",
           backgroundPosition: "center 30%",
         }}
       />
