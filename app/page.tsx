@@ -69,7 +69,7 @@ export default function Home() {
 
   }, []);
 
-  // AUTOPLAY MUSIC
+  // MUSIC
   useEffect(() => {
 
     const audio = audioRef.current;
@@ -78,7 +78,7 @@ export default function Home() {
 
     audio.volume = 0.35;
 
-    const playAudio = async () => {
+    const tryPlay = async () => {
 
       try {
 
@@ -92,52 +92,7 @@ export default function Home() {
 
     };
 
-    playAudio();
-
-    // FALLBACK FOR MOBILE / CHROME
-    const handleFirstInteraction = async () => {
-
-      try {
-
-        await audio.play();
-
-      } catch {}
-
-      window.removeEventListener(
-        "click",
-        handleFirstInteraction
-      );
-
-      window.removeEventListener(
-        "touchstart",
-        handleFirstInteraction
-      );
-
-    };
-
-    window.addEventListener(
-      "click",
-      handleFirstInteraction
-    );
-
-    window.addEventListener(
-      "touchstart",
-      handleFirstInteraction
-    );
-
-    return () => {
-
-      window.removeEventListener(
-        "click",
-        handleFirstInteraction
-      );
-
-      window.removeEventListener(
-        "touchstart",
-        handleFirstInteraction
-      );
-
-    };
+    tryPlay();
 
   }, []);
 
@@ -145,13 +100,11 @@ export default function Home() {
 
     <main className="min-h-screen bg-black text-white relative overflow-hidden">
 
-      {/* MUSIC */}
+      {/* AUDIO */}
       <audio
         ref={audioRef}
         autoPlay
         loop
-        playsInline
-        preload="auto"
       >
         <source
           src="/music/bayangkan.mp3"
@@ -161,7 +114,7 @@ export default function Home() {
 
       {/* BACKGROUND */}
       <div
-        className="absolute inset-0 bg-cover bg-center"
+        className="absolute inset-0 bg-cover"
         style={{
           backgroundImage:
             "url('/images/bg.jpeg')",
