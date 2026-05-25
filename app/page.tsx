@@ -3,7 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 
 export default function Home() {
-  const targetDate = new Date("2026-06-01T00:00:00");
+
+  // LOCK WEBSITE MANUAL
+  const isUnlocked = false;
+
+  const targetDate = new Date("2026-06-01T23:59:59");
 
   const audioRef = useRef<HTMLAudioElement>(null);
 
@@ -14,27 +18,42 @@ export default function Home() {
     seconds: 0,
   });
 
+  // COUNTDOWN
   useEffect(() => {
+
     const timer = setInterval(() => {
+
       const now = new Date();
 
       const difference =
         targetDate.getTime() - now.getTime();
 
-      const days = Math.floor(
-        difference / (1000 * 60 * 60 * 24)
+      const days = Math.max(
+        0,
+        Math.floor(
+          difference / (1000 * 60 * 60 * 24)
+        )
       );
 
-      const hours = Math.floor(
-        (difference / (1000 * 60 * 60)) % 24
+      const hours = Math.max(
+        0,
+        Math.floor(
+          (difference / (1000 * 60 * 60)) % 24
+        )
       );
 
-      const minutes = Math.floor(
-        (difference / (1000 * 60)) % 60
+      const minutes = Math.max(
+        0,
+        Math.floor(
+          (difference / (1000 * 60)) % 60
+        )
       );
 
-      const seconds = Math.floor(
-        (difference / 1000) % 60
+      const seconds = Math.max(
+        0,
+        Math.floor(
+          (difference / 1000) % 60
+        )
       );
 
       setTimeLeft({
@@ -43,30 +62,47 @@ export default function Home() {
         minutes,
         seconds,
       });
+
     }, 1000);
 
     return () => clearInterval(timer);
+
   }, []);
 
+  // MUSIC AUTOPLAY
   useEffect(() => {
+
     const playMusic = async () => {
+
       try {
+        audioRef.current!.volume = 0.35;
+
         await audioRef.current?.play();
+
       } catch (err) {
+
         console.log("Autoplay blocked");
+
       }
+
     };
 
     playMusic();
 
+    // FALLBACK
     const unlockAudio = async () => {
+
       try {
+
         await audioRef.current?.play();
+
         document.removeEventListener(
           "click",
           unlockAudio
         );
+
       } catch {}
+
     };
 
     document.addEventListener(
@@ -75,14 +111,18 @@ export default function Home() {
     );
 
     return () => {
+
       document.removeEventListener(
         "click",
         unlockAudio
       );
+
     };
+
   }, []);
 
   return (
+
     <main className="min-h-screen bg-black text-white relative overflow-hidden">
 
       {/* MUSIC */}
@@ -94,14 +134,14 @@ export default function Home() {
         className="hidden"
       >
         <source
-          src="/music/Hindia - Bayangkan.mp3"
+          src="/music/bayangkan.mp3"
           type="audio/mpeg"
         />
       </audio>
 
       {/* BACKGROUND */}
       <div
-        className="absolute inset-0 bg-cover"
+        className="absolute inset-0 bg-cover bg-center"
         style={{
           backgroundImage:
             "url('/images/bg.jpeg')",
@@ -112,7 +152,7 @@ export default function Home() {
       {/* DARK OVERLAY */}
       <div className="absolute inset-0 bg-black/65" />
 
-      {/* GLOW EFFECT */}
+      {/* GLOW */}
       <div className="absolute w-[500px] h-[500px] bg-pink-500/20 blur-3xl rounded-full top-[-100px] left-[-100px]" />
 
       <div className="absolute w-[400px] h-[400px] bg-purple-500/20 blur-3xl rounded-full bottom-[-100px] right-[-100px]" />
@@ -159,16 +199,31 @@ export default function Home() {
 
         </div>
 
-        {/* BUTTON */}
-        <a
-          href="/chapters"
-          className="px-8 py-4 rounded-full bg-white text-black font-semibold hover:scale-105 transition duration-300"
-        >
-          Start Journey
-        </a>
+        {/* LOCKED BUTTON */}
+        {isUnlocked ? (
+
+          <a
+            href="/chapters"
+            className="px-8 py-4 rounded-full bg-white text-black font-semibold hover:scale-105 transition duration-300"
+          >
+            Start Journey
+          </a>
+
+        ) : (
+
+          <button
+            disabled
+            className="px-8 py-4 rounded-full bg-white/20 text-white/60 border border-white/10 backdrop-blur-md cursor-not-allowed"
+          >
+            Locked Until June 1st ✨
+          </button>
+
+        )}
 
       </div>
+
     </main>
+
   );
 }
 
@@ -179,7 +234,9 @@ function TimeCard({
   value: number;
   label: string;
 }) {
+
   return (
+
     <div className="bg-white/10 border border-white/10 backdrop-blur-md rounded-2xl p-5 min-w-[90px]">
 
       <div className="text-3xl font-bold">
@@ -191,5 +248,7 @@ function TimeCard({
       </div>
 
     </div>
+
   );
+
 }
