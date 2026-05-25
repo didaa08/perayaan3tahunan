@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 export default function Home() {
+
   const targetDate = new Date("2026-06-01T00:00:00");
 
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -15,7 +16,9 @@ export default function Home() {
   });
 
   useEffect(() => {
+
     const timer = setInterval(() => {
+
       const now = new Date();
 
       const difference =
@@ -43,30 +46,45 @@ export default function Home() {
         minutes,
         seconds,
       });
+
     }, 1000);
 
     return () => clearInterval(timer);
+
   }, []);
 
+  // MUSIC
   useEffect(() => {
+
     const playMusic = async () => {
+
       try {
+
         await audioRef.current?.play();
+
       } catch (err) {
+
         console.log("Autoplay blocked");
+
       }
+
     };
 
     playMusic();
 
     const unlockAudio = async () => {
+
       try {
+
         await audioRef.current?.play();
+
         document.removeEventListener(
           "click",
           unlockAudio
         );
+
       } catch {}
+
     };
 
     document.addEventListener(
@@ -75,14 +93,18 @@ export default function Home() {
     );
 
     return () => {
+
       document.removeEventListener(
         "click",
         unlockAudio
       );
+
     };
+
   }, []);
 
   return (
+
     <main className="min-h-screen bg-black text-white relative overflow-hidden">
 
       {/* MUSIC */}
@@ -160,16 +182,32 @@ export default function Home() {
         </div>
 
         {/* BUTTON */}
-        <a
-          href="/chapters"
-          className="px-8 py-4 rounded-full bg-white text-black font-semibold hover:scale-105 transition duration-300"
-        >
-          Start Journey
-        </a>
+        {new Date() >= targetDate ? (
+
+          <a
+            href="/chapters"
+            className="px-8 py-4 rounded-full bg-white text-black font-semibold hover:scale-105 transition duration-300"
+          >
+            Start Journey
+          </a>
+
+        ) : (
+
+          <button
+            disabled
+            className="px-8 py-4 rounded-full bg-white/20 text-white/60 border border-white/10 backdrop-blur-md cursor-not-allowed"
+          >
+            Locked Until June 1st ✨
+          </button>
+
+        )}
 
       </div>
+
     </main>
+
   );
+
 }
 
 function TimeCard({
@@ -179,7 +217,9 @@ function TimeCard({
   value: number;
   label: string;
 }) {
+
   return (
+
     <div className="bg-white/10 border border-white/10 backdrop-blur-md rounded-2xl p-5 min-w-[90px]">
 
       <div className="text-3xl font-bold">
@@ -191,5 +231,7 @@ function TimeCard({
       </div>
 
     </div>
+
   );
+
 }
