@@ -6,15 +6,20 @@ import { AnimatePresence, motion } from "framer-motion";
 export default function Chapter2Page() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] =
+    useState(0);
+
   const [showVideo, setShowVideo] =
     useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
+
     if (!canvas) return;
 
-    const ctx = canvas.getContext("2d");
+    const ctx =
+      canvas.getContext("2d");
+
     if (!ctx) return;
 
     const width = 980;
@@ -25,6 +30,14 @@ export default function Chapter2Page() {
 
     let isDrawing = false;
     let unlocked = false;
+
+    // =========================
+    // PROGRESS SYSTEM
+    // =========================
+
+    let scratchCount = 0;
+
+    const MAX_SCRATCH = 220;
 
     // =========================
     // DRAW SILVER LAYER
@@ -41,16 +54,42 @@ export default function Chapter2Page() {
           height
         );
 
-      gradient.addColorStop(0, "#d4d4d8");
-      gradient.addColorStop(0.25, "#ffffff");
-      gradient.addColorStop(0.5, "#e4e4e7");
-      gradient.addColorStop(0.75, "#fafafa");
-      gradient.addColorStop(1, "#d4d4d8");
+      gradient.addColorStop(
+        0,
+        "#d4d4d8"
+      );
+
+      gradient.addColorStop(
+        0.25,
+        "#ffffff"
+      );
+
+      gradient.addColorStop(
+        0.5,
+        "#e4e4e7"
+      );
+
+      gradient.addColorStop(
+        0.75,
+        "#fafafa"
+      );
+
+      gradient.addColorStop(
+        1,
+        "#d4d4d8"
+      );
 
       ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, width, height);
 
-      // shiny lines
+      ctx.fillRect(
+        0,
+        0,
+        width,
+        height
+      );
+
+      // SHINY STREAKS
+
       for (
         let i = -300;
         i < width;
@@ -59,7 +98,11 @@ export default function Chapter2Page() {
         ctx.beginPath();
 
         ctx.moveTo(i, 0);
-        ctx.lineTo(i + 280, height);
+
+        ctx.lineTo(
+          i + 280,
+          height
+        );
 
         ctx.strokeStyle =
           "rgba(255,255,255,0.12)";
@@ -69,8 +112,13 @@ export default function Chapter2Page() {
         ctx.stroke();
       }
 
-      // texture
-      for (let i = 0; i < 12000; i++) {
+      // NOISE
+
+      for (
+        let i = 0;
+        i < 12000;
+        i++
+      ) {
         ctx.fillStyle = `rgba(255,255,255,${
           Math.random() * 0.04
         })`;
@@ -87,7 +135,7 @@ export default function Chapter2Page() {
     drawLayer();
 
     // =========================
-    // SCRATCH
+    // SCRATCH EFFECT
     // =========================
 
     const scratch = (
@@ -119,6 +167,39 @@ export default function Chapter2Page() {
 
         ctx.fill();
       }
+
+      // =========================
+      // UPDATE PROGRESS
+      // =========================
+
+      scratchCount++;
+
+      const newProgress =
+        Math.min(
+          Math.floor(
+            (scratchCount /
+              MAX_SCRATCH) *
+              100
+          ),
+          100
+        );
+
+      setProgress(newProgress);
+
+      // =========================
+      // VIDEO POPUP
+      // =========================
+
+      if (
+        newProgress >= 70 &&
+        !unlocked
+      ) {
+        unlocked = true;
+
+        setTimeout(() => {
+          setShowVideo(true);
+        }, 500);
+      }
     };
 
     // =========================
@@ -134,12 +215,12 @@ export default function Chapter2Page() {
       if ("touches" in e) {
         return {
           x:
-            e.touches[0].clientX -
-            rect.left,
+            e.touches[0]
+              .clientX - rect.left,
 
           y:
-            e.touches[0].clientY -
-            rect.top,
+            e.touches[0]
+              .clientY - rect.top,
         };
       }
 
@@ -147,53 +228,6 @@ export default function Chapter2Page() {
         x: e.clientX - rect.left,
         y: e.clientY - rect.top,
       };
-    };
-
-    // =========================
-    // PROGRESS
-    // =========================
-
-    const calculateProgress = () => {
-      const imageData = ctx.getImageData(
-        0,
-        0,
-        width,
-        height
-      );
-
-      let transparent = 0;
-
-      for (
-        let i = 3;
-        i < imageData.data.length;
-        i += 4
-      ) {
-        if (imageData.data[i] === 0) {
-          transparent++;
-        }
-      }
-
-      const percentage =
-        (transparent / (width * height)) *
-        100;
-
-      const rounded =
-        Math.floor(percentage);
-
-      setProgress(rounded);
-
-      // UNLOCK AT 70%
-
-      if (
-        rounded >= 70 &&
-        !unlocked
-      ) {
-        unlocked = true;
-
-        setTimeout(() => {
-          setShowVideo(true);
-        }, 500);
-      }
     };
 
     // =========================
@@ -216,8 +250,6 @@ export default function Chapter2Page() {
       const pos = getPosition(e);
 
       scratch(pos.x, pos.y);
-
-      calculateProgress();
     };
 
     canvas.addEventListener(
@@ -307,7 +339,6 @@ export default function Chapter2Page() {
           p-6
         "
       >
-
         {/* BACKGROUND */}
 
         <div className="absolute inset-0 bg-[#07070a]" />
@@ -344,7 +375,6 @@ export default function Chapter2Page() {
             shadow-[0_0_100px_rgba(255,255,255,0.04)]
           "
         >
-
           {/* CONTENT */}
 
           <div className="absolute inset-0 z-20 flex flex-col items-center pt-[70px] text-white">
@@ -381,7 +411,7 @@ export default function Chapter2Page() {
               to appear all at once
             </p>
 
-            {/* PHOTO CARD */}
+            {/* MEMORY CARD */}
 
             <div
               className="
@@ -396,7 +426,6 @@ export default function Chapter2Page() {
                 backdrop-blur-xl
               "
             >
-
               {/* LABEL */}
 
               <div className="absolute top-7 left-0 right-0 text-center z-20">
@@ -441,11 +470,13 @@ export default function Chapter2Page() {
 
             </div>
 
+            {/* ========================= */}
             {/* PROGRESS */}
+            {/* ========================= */}
 
             <div className="mt-12 w-[520px]">
 
-              {/* INFO */}
+              {/* TOP INFO */}
 
               <div className="flex items-center justify-between mb-4">
 
@@ -511,7 +542,7 @@ export default function Chapter2Page() {
 
           </div>
 
-          {/* SCRATCH LAYER */}
+          {/* SCRATCH CANVAS */}
 
           <canvas
             ref={canvasRef}
@@ -527,7 +558,9 @@ export default function Chapter2Page() {
 
       </main>
 
+      {/* ========================= */}
       {/* VIDEO POPUP */}
+      {/* ========================= */}
 
       <AnimatePresence>
 
@@ -565,7 +598,7 @@ export default function Chapter2Page() {
               }
             />
 
-            {/* VIDEO */}
+            {/* VIDEO CARD */}
 
             <motion.div
               initial={{
