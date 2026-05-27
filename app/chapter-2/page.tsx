@@ -567,3 +567,5 @@ export default function Chapter2Page() {
       </motion.div>
 
     </motion.main>
+  );
+}
