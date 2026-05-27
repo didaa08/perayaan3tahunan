@@ -7,7 +7,8 @@ export default function Chapter2Page() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const [progress, setProgress] = useState(0);
-  const [showVideo, setShowVideo] = useState(false);
+  const [showVideo, setShowVideo] =
+    useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -26,22 +27,22 @@ export default function Chapter2Page() {
     let unlocked = false;
 
     // =========================
-    // DRAW SCRATCH LAYER
+    // DRAW SILVER LAYER
     // =========================
 
     const drawLayer = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // PEARL GRADIENT
-      const gradient = ctx.createLinearGradient(
-        0,
-        0,
-        width,
-        height
-      );
+      const gradient =
+        ctx.createLinearGradient(
+          0,
+          0,
+          width,
+          height
+        );
 
       gradient.addColorStop(0, "#d4d4d8");
-      gradient.addColorStop(0.25, "#f4f4f5");
+      gradient.addColorStop(0.25, "#ffffff");
       gradient.addColorStop(0.5, "#e4e4e7");
       gradient.addColorStop(0.75, "#fafafa");
       gradient.addColorStop(1, "#d4d4d8");
@@ -49,11 +50,30 @@ export default function Chapter2Page() {
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, width, height);
 
-      // GRAIN
-      for (let i = 0; i < 15000; i++) {
-        const alpha = Math.random() * 0.05;
+      // shiny lines
+      for (
+        let i = -300;
+        i < width;
+        i += 140
+      ) {
+        ctx.beginPath();
 
-        ctx.fillStyle = `rgba(255,255,255,${alpha})`;
+        ctx.moveTo(i, 0);
+        ctx.lineTo(i + 280, height);
+
+        ctx.strokeStyle =
+          "rgba(255,255,255,0.12)";
+
+        ctx.lineWidth = 40;
+
+        ctx.stroke();
+      }
+
+      // texture
+      for (let i = 0; i < 12000; i++) {
+        ctx.fillStyle = `rgba(255,255,255,${
+          Math.random() * 0.04
+        })`;
 
         ctx.fillRect(
           Math.random() * width,
@@ -62,87 +82,22 @@ export default function Chapter2Page() {
           1
         );
       }
-
-      // SHIMMER
-      for (let i = -height; i < width; i += 90) {
-        ctx.beginPath();
-
-        ctx.moveTo(i, 0);
-        ctx.lineTo(i + 220, height);
-
-        ctx.strokeStyle =
-          "rgba(255,255,255,0.05)";
-
-        ctx.lineWidth = 24;
-
-        ctx.stroke();
-      }
-
-      // CENTER GLOW
-      const glow = ctx.createRadialGradient(
-        width / 2,
-        height / 2,
-        50,
-        width / 2,
-        height / 2,
-        350
-      );
-
-      glow.addColorStop(
-        0,
-        "rgba(255,255,255,0.18)"
-      );
-
-      glow.addColorStop(
-        1,
-        "rgba(255,255,255,0)"
-      );
-
-      ctx.fillStyle = glow;
-      ctx.fillRect(0, 0, width, height);
-
-      // TEXT
-      ctx.textAlign = "center";
-
-      ctx.fillStyle = "rgba(255,255,255,0.92)";
-      ctx.font = "italic 78px serif";
-
-      ctx.fillText(
-        "Hidden Memories",
-        width / 2,
-        240
-      );
-
-      ctx.fillStyle = "rgba(255,255,255,0.55)";
-      ctx.font = "20px sans-serif";
-
-      ctx.fillText(
-        "scratch slowly to reveal",
-        width / 2,
-        300
-      );
-
-      ctx.fillStyle = "rgba(255,255,255,0.22)";
-      ctx.font = "14px sans-serif";
-
-      ctx.fillText(
-        "hold click and move gently",
-        width / 2,
-        520
-      );
     };
 
     drawLayer();
 
     // =========================
-    // SCRATCH EFFECT
+    // SCRATCH
     // =========================
 
-    const scratch = (x: number, y: number) => {
+    const scratch = (
+      x: number,
+      y: number
+    ) => {
       ctx.globalCompositeOperation =
         "destination-out";
 
-      for (let i = 0; i < 8; i++) {
+      for (let i = 0; i < 6; i++) {
         const offsetX =
           (Math.random() - 0.5) * 30;
 
@@ -150,7 +105,7 @@ export default function Chapter2Page() {
           (Math.random() - 0.5) * 30;
 
         const radius =
-          Math.random() * 18 + 22;
+          Math.random() * 18 + 24;
 
         ctx.beginPath();
 
@@ -181,6 +136,7 @@ export default function Chapter2Page() {
           x:
             e.touches[0].clientX -
             rect.left,
+
           y:
             e.touches[0].clientY -
             rect.top,
@@ -194,7 +150,7 @@ export default function Chapter2Page() {
     };
 
     // =========================
-    // CALCULATE PROGRESS
+    // PROGRESS
     // =========================
 
     const calculateProgress = () => {
@@ -221,11 +177,12 @@ export default function Chapter2Page() {
         (transparent / (width * height)) *
         100;
 
-      const rounded = Math.floor(percentage);
+      const rounded =
+        Math.floor(percentage);
 
       setProgress(rounded);
 
-      // SHOW VIDEO AT 70%
+      // UNLOCK AT 70%
 
       if (
         rounded >= 70 &&
@@ -243,11 +200,11 @@ export default function Chapter2Page() {
     // EVENTS
     // =========================
 
-    const start = () => {
+    const startDrawing = () => {
       isDrawing = true;
     };
 
-    const end = () => {
+    const stopDrawing = () => {
       isDrawing = false;
     };
 
@@ -265,17 +222,17 @@ export default function Chapter2Page() {
 
     canvas.addEventListener(
       "mousedown",
-      start
+      startDrawing
     );
 
     canvas.addEventListener(
       "mouseup",
-      end
+      stopDrawing
     );
 
     canvas.addEventListener(
       "mouseleave",
-      end
+      stopDrawing
     );
 
     canvas.addEventListener(
@@ -285,12 +242,12 @@ export default function Chapter2Page() {
 
     canvas.addEventListener(
       "touchstart",
-      start
+      startDrawing
     );
 
     canvas.addEventListener(
       "touchend",
-      end
+      stopDrawing
     );
 
     canvas.addEventListener(
@@ -301,17 +258,17 @@ export default function Chapter2Page() {
     return () => {
       canvas.removeEventListener(
         "mousedown",
-        start
+        startDrawing
       );
 
       canvas.removeEventListener(
         "mouseup",
-        end
+        stopDrawing
       );
 
       canvas.removeEventListener(
         "mouseleave",
-        end
+        stopDrawing
       );
 
       canvas.removeEventListener(
@@ -321,12 +278,12 @@ export default function Chapter2Page() {
 
       canvas.removeEventListener(
         "touchstart",
-        start
+        startDrawing
       );
 
       canvas.removeEventListener(
         "touchend",
-        end
+        stopDrawing
       );
 
       canvas.removeEventListener(
@@ -347,6 +304,7 @@ export default function Chapter2Page() {
           flex
           items-center
           justify-center
+          p-6
         "
       >
 
@@ -354,18 +312,16 @@ export default function Chapter2Page() {
 
         <div className="absolute inset-0 bg-[#07070a]" />
 
-        {/* GLOWS */}
-
         <div className="absolute left-[-10%] top-[10%] w-[700px] h-[700px] rounded-full bg-pink-500/20 blur-[180px]" />
 
         <div className="absolute right-[-10%] bottom-[0%] w-[700px] h-[700px] rounded-full bg-violet-500/20 blur-[180px]" />
 
-        {/* CARD */}
+        {/* MAIN CARD */}
 
         <motion.div
           initial={{
             opacity: 0,
-            y: 20,
+            y: 30,
             scale: 0.97,
           }}
           animate={{
@@ -393,9 +349,13 @@ export default function Chapter2Page() {
 
           <div className="absolute inset-0 z-20 flex flex-col items-center pt-[70px] text-white">
 
+            {/* CHAPTER */}
+
             <p className="uppercase tracking-[0.7em] text-white/45 text-[12px] mb-8">
               Chapter 02
             </p>
+
+            {/* TITLE */}
 
             <h1
               className="
@@ -405,12 +365,15 @@ export default function Chapter2Page() {
                 font-light
                 tracking-[-0.05em]
                 text-white
+                text-center
               "
             >
               Hidden
               <br />
               Memories
             </h1>
+
+            {/* SUBTEXT */}
 
             <p className="mt-8 text-white/55 text-[18px] leading-relaxed text-center">
               some memories were never meant
@@ -457,7 +420,6 @@ export default function Chapter2Page() {
                       w-full
                       h-full
                       object-cover
-                      grayscale
                     "
                   />
 
@@ -467,7 +429,7 @@ export default function Chapter2Page() {
 
               </div>
 
-              {/* BOTTOM TEXT */}
+              {/* FOOTER */}
 
               <div className="absolute bottom-7 left-0 right-0 text-center">
 
@@ -479,9 +441,7 @@ export default function Chapter2Page() {
 
             </div>
 
-            {/* ========================= */}
-            {/* PROGRESS BAR */}
-            {/* ========================= */}
+            {/* PROGRESS */}
 
             <div className="mt-12 w-[520px]">
 
@@ -551,14 +511,14 @@ export default function Chapter2Page() {
 
           </div>
 
-          {/* SCRATCH CANVAS */}
+          {/* SCRATCH LAYER */}
 
           <canvas
             ref={canvasRef}
             className="
               absolute
               inset-0
-              z-10
+              z-30
               cursor-crosshair
             "
           />
@@ -567,9 +527,7 @@ export default function Chapter2Page() {
 
       </main>
 
-      {/* ========================= */}
       {/* VIDEO POPUP */}
-      {/* ========================= */}
 
       <AnimatePresence>
 
@@ -607,7 +565,7 @@ export default function Chapter2Page() {
               }
             />
 
-            {/* VIDEO CARD */}
+            {/* VIDEO */}
 
             <motion.div
               initial={{
@@ -631,11 +589,8 @@ export default function Chapter2Page() {
                 overflow-hidden
                 border border-white/10
                 bg-black
-                shadow-[0_0_120px_rgba(255,255,255,0.08)]
               "
             >
-
-              {/* VIDEO */}
 
               <video
                 autoPlay
@@ -668,8 +623,6 @@ export default function Chapter2Page() {
                   bg-black/50
                   text-white
                   text-xl
-                  hover:bg-black/70
-                  transition-all
                 "
               >
                 ✕
