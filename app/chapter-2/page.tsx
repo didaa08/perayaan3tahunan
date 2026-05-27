@@ -32,20 +32,17 @@ export default function Chapter2Page() {
     canvas.width = width;
     canvas.height = height;
 
+    // =========================
+    // STATE
+    // =========================
+
     let isDrawing = false;
     let unlocked = false;
 
-    // =========================
-    // SCRATCH PROGRESS
-    // =========================
-
-    let scratchAmount = 0;
+    let scratchProgress = 0;
 
     // MAKIN BESAR = MAKIN LAMA
-    const MAX_SCRATCH = 22000;
-
-    let lastX = 0;
-    let lastY = 0;
+    const MAX_PROGRESS = 6000;
 
     // =========================
     // DRAW SILVER LAYER
@@ -54,7 +51,7 @@ export default function Chapter2Page() {
     const drawLayer = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // BASE
+      // BASE GRADIENT
 
       const gradient =
         ctx.createLinearGradient(
@@ -122,7 +119,7 @@ export default function Chapter2Page() {
         ctx.stroke();
       }
 
-      // NOISE
+      // TEXTURE
 
       for (
         let i = 0;
@@ -130,7 +127,7 @@ export default function Chapter2Page() {
         i++
       ) {
         ctx.fillStyle = `rgba(255,255,255,${
-          Math.random() * 0.04
+          Math.random() * 0.05
         })`;
 
         ctx.fillRect(
@@ -152,7 +149,9 @@ export default function Chapter2Page() {
       x: number,
       y: number
     ) => {
-      // LANGSUNG CLEAR AREA
+      ctx.save();
+
+      // LANGSUNG HAPUS CLEAN
       ctx.globalCompositeOperation =
         "destination-out";
 
@@ -161,46 +160,29 @@ export default function Chapter2Page() {
       ctx.arc(
         x,
         y,
-        42,
+        40,
         0,
         Math.PI * 2
       );
 
-      ctx.fill();
-
-      // EXTRA EDGE CLEAN
-
-      ctx.beginPath();
-
-      ctx.arc(
-        x,
-        y,
-        24,
-        0,
-        Math.PI * 2
-      );
+      ctx.fillStyle =
+        "rgba(0,0,0,1)";
 
       ctx.fill();
+
+      ctx.restore();
 
       // =========================
       // PROGRESS
       // =========================
 
-      const distance = Math.sqrt(
-        Math.pow(x - lastX, 2) +
-          Math.pow(y - lastY, 2)
-      );
-
-      scratchAmount += distance;
-
-      lastX = x;
-      lastY = y;
+      scratchProgress += 1;
 
       const percentage =
         Math.min(
           Math.floor(
-            (scratchAmount /
-              MAX_SCRATCH) *
+            (scratchProgress /
+              MAX_PROGRESS) *
               100
           ),
           100
@@ -225,7 +207,7 @@ export default function Chapter2Page() {
     };
 
     // =========================
-    // GET POSITION
+    // POSITION
     // =========================
 
     const getPosition = (
@@ -256,25 +238,20 @@ export default function Chapter2Page() {
     // EVENTS
     // =========================
 
-    const startDrawing = (
-      e: MouseEvent | TouchEvent
-    ) => {
+    const startDrawing = () => {
       isDrawing = true;
-
-      const pos = getPosition(e);
-
-      lastX = pos.x;
-      lastY = pos.y;
     };
 
     const stopDrawing = () => {
       isDrawing = false;
     };
 
-    const move = (
+    const draw = (
       e: MouseEvent | TouchEvent
     ) => {
       if (!isDrawing) return;
+
+      e.preventDefault();
 
       const pos = getPosition(e);
 
@@ -300,7 +277,7 @@ export default function Chapter2Page() {
 
     canvas.addEventListener(
       "mousemove",
-      move
+      draw
     );
 
     // TOUCH
@@ -317,7 +294,8 @@ export default function Chapter2Page() {
 
     canvas.addEventListener(
       "touchmove",
-      move
+      draw,
+      { passive: false }
     );
 
     return () => {
@@ -338,7 +316,7 @@ export default function Chapter2Page() {
 
       canvas.removeEventListener(
         "mousemove",
-        move
+        draw
       );
 
       canvas.removeEventListener(
@@ -353,7 +331,7 @@ export default function Chapter2Page() {
 
       canvas.removeEventListener(
         "touchmove",
-        move
+        draw
       );
     };
   }, []);
@@ -386,7 +364,7 @@ export default function Chapter2Page() {
         <motion.div
           initial={{
             opacity: 0,
-            y: 30,
+            y: 20,
             scale: 0.97,
           }}
           animate={{
@@ -406,7 +384,6 @@ export default function Chapter2Page() {
             border border-white/10
             bg-white/[0.03]
             backdrop-blur-2xl
-            shadow-[0_0_100px_rgba(255,255,255,0.04)]
           "
         >
 
@@ -425,7 +402,6 @@ export default function Chapter2Page() {
                 leading-[0.9]
                 font-light
                 tracking-[-0.05em]
-                text-white
                 text-center
               "
             >
@@ -434,13 +410,13 @@ export default function Chapter2Page() {
               Memories
             </h1>
 
-            <p className="mt-8 text-white/55 text-[18px] leading-relaxed text-center">
-              some memories were never meant
+            <p className="mt-8 text-white/55 text-[18px] text-center leading-relaxed">
+              scratch the silver layer
               <br />
-              to appear all at once
+              to unlock hidden memory
             </p>
 
-            {/* MEMORY CARD */}
+            {/* PHOTO */}
 
             <div
               className="
@@ -451,60 +427,26 @@ export default function Chapter2Page() {
                 rounded-[32px]
                 overflow-hidden
                 border border-white/10
-                bg-white/[0.04]
-                backdrop-blur-xl
               "
             >
 
-              {/* LABEL */}
+              <img
+                src="/images/memory.jpg"
+                alt="memory"
+                className="
+                  w-full
+                  h-full
+                  object-cover
+                "
+              />
 
-              <div className="absolute top-7 left-0 right-0 text-center z-20">
-
-                <div className="text-[12px] tracking-[0.6em] text-pink-100/70">
-                  MEMORY ACCESS
-                </div>
-
-              </div>
-
-              {/* PHOTO */}
-
-              <div className="absolute inset-0 p-10 pt-16">
-
-                <div className="relative w-full h-full rounded-[20px] overflow-hidden">
-
-                  <img
-                    src="/images/memory.jpg"
-                    alt="memory"
-                    className="
-                      w-full
-                      h-full
-                      object-cover
-                    "
-                  />
-
-                  <div className="absolute inset-0 bg-black/20" />
-
-                </div>
-
-              </div>
-
-              {/* FOOTER */}
-
-              <div className="absolute bottom-7 left-0 right-0 text-center">
-
-                <div className="text-[12px] tracking-[0.45em] text-white/40">
-                  CHAPTER_02
-                </div>
-
-              </div>
+              <div className="absolute inset-0 bg-black/20" />
 
             </div>
 
             {/* PROGRESS */}
 
             <div className="mt-12 w-[520px]">
-
-              {/* INFO */}
 
               <div className="flex items-center justify-between mb-4">
 
@@ -520,7 +462,7 @@ export default function Chapter2Page() {
 
               {/* BAR */}
 
-              <div className="relative h-[8px] rounded-full overflow-hidden bg-white/10">
+              <div className="h-[8px] rounded-full overflow-hidden bg-white/10">
 
                 <motion.div
                   animate={{
@@ -538,31 +480,6 @@ export default function Chapter2Page() {
                     to-violet-200
                   "
                 />
-
-              </div>
-
-              {/* STATUS */}
-
-              <div className="mt-4 text-center">
-
-                {progress < 30 && (
-                  <p className="text-white/25 text-[12px] tracking-[0.35em] uppercase">
-                    memory still hidden
-                  </p>
-                )}
-
-                {progress >= 30 &&
-                  progress < 70 && (
-                    <p className="text-white/35 text-[12px] tracking-[0.35em] uppercase">
-                      memory revealing...
-                    </p>
-                  )}
-
-                {progress >= 70 && (
-                  <p className="text-pink-100/70 text-[12px] tracking-[0.35em] uppercase">
-                    memory unlocked
-                  </p>
-                )}
 
               </div>
 
@@ -615,8 +532,6 @@ export default function Chapter2Page() {
             "
           >
 
-            {/* BACKDROP */}
-
             <div
               className="absolute inset-0"
               onClick={() =>
@@ -624,21 +539,16 @@ export default function Chapter2Page() {
               }
             />
 
-            {/* VIDEO CARD */}
+            {/* VIDEO */}
 
             <motion.div
               initial={{
                 opacity: 0,
                 scale: 0.95,
-                y: 20,
               }}
               animate={{
                 opacity: 1,
                 scale: 1,
-                y: 0,
-              }}
-              transition={{
-                duration: 0.5,
               }}
               className="
                 relative
@@ -646,7 +556,6 @@ export default function Chapter2Page() {
                 max-w-5xl
                 rounded-[32px]
                 overflow-hidden
-                border border-white/10
                 bg-black
               "
             >
@@ -665,8 +574,6 @@ export default function Chapter2Page() {
                   type="video/mp4"
                 />
               </video>
-
-              {/* CLOSE */}
 
               <button
                 onClick={() =>
