@@ -36,13 +36,25 @@ export default function Chapter2Page() {
     let unlocked = false;
 
     // =========================
+    // SCRATCH PROGRESS
+    // =========================
+
+    let scratchAmount = 0;
+
+    // MAKIN BESAR = MAKIN LAMA
+    const MAX_SCRATCH = 22000;
+
+    let lastX = 0;
+    let lastY = 0;
+
+    // =========================
     // DRAW SILVER LAYER
     // =========================
 
     const drawLayer = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // BASE GRADIENT
+      // BASE
 
       const gradient =
         ctx.createLinearGradient(
@@ -86,7 +98,7 @@ export default function Chapter2Page() {
         height
       );
 
-      // SHINY STREAKS
+      // SHINY LINES
 
       for (
         let i = -300;
@@ -140,77 +152,64 @@ export default function Chapter2Page() {
       x: number,
       y: number
     ) => {
+      // LANGSUNG CLEAR AREA
       ctx.globalCompositeOperation =
         "destination-out";
 
-      for (let i = 0; i < 5; i++) {
-        const offsetX =
-          (Math.random() - 0.5) * 24;
+      ctx.beginPath();
 
-        const offsetY =
-          (Math.random() - 0.5) * 24;
+      ctx.arc(
+        x,
+        y,
+        42,
+        0,
+        Math.PI * 2
+      );
 
-        const radius =
-          Math.random() * 16 + 18;
+      ctx.fill();
 
-        ctx.beginPath();
+      // EXTRA EDGE CLEAN
 
-        ctx.arc(
-          x + offsetX,
-          y + offsetY,
-          radius,
-          0,
-          Math.PI * 2
-        );
+      ctx.beginPath();
 
-        ctx.fill();
-      }
-    };
+      ctx.arc(
+        x,
+        y,
+        24,
+        0,
+        Math.PI * 2
+      );
 
-    // =========================
-    // REAL AREA PROGRESS
-    // =========================
+      ctx.fill();
 
-    const calculateProgress = () => {
-      const imageData =
-        ctx.getImageData(
-          0,
-          0,
-          width,
-          height
-        );
+      // =========================
+      // PROGRESS
+      // =========================
 
-      const pixels =
-        imageData.data;
+      const distance = Math.sqrt(
+        Math.pow(x - lastX, 2) +
+          Math.pow(y - lastY, 2)
+      );
 
-      let transparent = 0;
+      scratchAmount += distance;
 
-      // CHECK ALPHA PIXELS
-
-      for (
-        let i = 3;
-        i < pixels.length;
-        i += 4
-      ) {
-        if (pixels[i] < 10) {
-          transparent++;
-        }
-      }
-
-      const totalPixels =
-        width * height;
+      lastX = x;
+      lastY = y;
 
       const percentage =
-        Math.floor(
-          (transparent /
-            totalPixels) *
-            100
+        Math.min(
+          Math.floor(
+            (scratchAmount /
+              MAX_SCRATCH) *
+              100
+          ),
+          100
         );
 
       setProgress(percentage);
 
       // =========================
-      // VIDEO POPUP
+      // SHOW VIDEO
       // =========================
 
       if (
@@ -226,7 +225,7 @@ export default function Chapter2Page() {
     };
 
     // =========================
-    // POSITION
+    // GET POSITION
     // =========================
 
     const getPosition = (
@@ -257,8 +256,15 @@ export default function Chapter2Page() {
     // EVENTS
     // =========================
 
-    const startDrawing = () => {
+    const startDrawing = (
+      e: MouseEvent | TouchEvent
+    ) => {
       isDrawing = true;
+
+      const pos = getPosition(e);
+
+      lastX = pos.x;
+      lastY = pos.y;
     };
 
     const stopDrawing = () => {
@@ -273,9 +279,9 @@ export default function Chapter2Page() {
       const pos = getPosition(e);
 
       scratch(pos.x, pos.y);
-
-      calculateProgress();
     };
+
+    // MOUSE
 
     canvas.addEventListener(
       "mousedown",
@@ -296,6 +302,8 @@ export default function Chapter2Page() {
       "mousemove",
       move
     );
+
+    // TOUCH
 
     canvas.addEventListener(
       "touchstart",
@@ -406,13 +414,9 @@ export default function Chapter2Page() {
 
           <div className="absolute inset-0 z-20 flex flex-col items-center pt-[70px] text-white">
 
-            {/* CHAPTER */}
-
             <p className="uppercase tracking-[0.7em] text-white/45 text-[12px] mb-8">
               Chapter 02
             </p>
-
-            {/* TITLE */}
 
             <h1
               className="
@@ -429,8 +433,6 @@ export default function Chapter2Page() {
               <br />
               Memories
             </h1>
-
-            {/* SUBTEXT */}
 
             <p className="mt-8 text-white/55 text-[18px] leading-relaxed text-center">
               some memories were never meant
@@ -525,7 +527,7 @@ export default function Chapter2Page() {
                     width: `${progress}%`,
                   }}
                   transition={{
-                    duration: 0.2,
+                    duration: 0.15,
                   }}
                   className="
                     h-full
@@ -622,7 +624,7 @@ export default function Chapter2Page() {
               }
             />
 
-            {/* VIDEO */}
+            {/* VIDEO CARD */}
 
             <motion.div
               initial={{
