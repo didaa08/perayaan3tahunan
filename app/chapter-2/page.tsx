@@ -35,9 +35,13 @@ export default function Chapter2Page() {
     // PROGRESS SYSTEM
     // =========================
 
-    let scratchCount = 0;
+    let scratchAmount = 0;
 
-    const MAX_SCRATCH = 220;
+    // makin gede makin lama
+    const MAX_SCRATCH = 5000;
+
+    let lastX = 0;
+    let lastY = 0;
 
     // =========================
     // DRAW SILVER LAYER
@@ -169,15 +173,23 @@ export default function Chapter2Page() {
       }
 
       // =========================
-      // UPDATE PROGRESS
+      // DISTANCE BASED PROGRESS
       // =========================
 
-      scratchCount++;
+      const distance = Math.sqrt(
+        Math.pow(x - lastX, 2) +
+          Math.pow(y - lastY, 2)
+      );
+
+      scratchAmount += distance;
+
+      lastX = x;
+      lastY = y;
 
       const newProgress =
         Math.min(
           Math.floor(
-            (scratchCount /
+            (scratchAmount /
               MAX_SCRATCH) *
               100
           ),
@@ -198,7 +210,7 @@ export default function Chapter2Page() {
 
         setTimeout(() => {
           setShowVideo(true);
-        }, 500);
+        }, 600);
       }
     };
 
@@ -234,8 +246,15 @@ export default function Chapter2Page() {
     // EVENTS
     // =========================
 
-    const startDrawing = () => {
+    const startDrawing = (
+      e: MouseEvent | TouchEvent
+    ) => {
       isDrawing = true;
+
+      const pos = getPosition(e);
+
+      lastX = pos.x;
+      lastY = pos.y;
     };
 
     const stopDrawing = () => {
@@ -339,6 +358,7 @@ export default function Chapter2Page() {
           p-6
         "
       >
+
         {/* BACKGROUND */}
 
         <div className="absolute inset-0 bg-[#07070a]" />
@@ -375,6 +395,7 @@ export default function Chapter2Page() {
             shadow-[0_0_100px_rgba(255,255,255,0.04)]
           "
         >
+
           {/* CONTENT */}
 
           <div className="absolute inset-0 z-20 flex flex-col items-center pt-[70px] text-white">
@@ -426,6 +447,7 @@ export default function Chapter2Page() {
                 backdrop-blur-xl
               "
             >
+
               {/* LABEL */}
 
               <div className="absolute top-7 left-0 right-0 text-center z-20">
@@ -476,7 +498,7 @@ export default function Chapter2Page() {
 
             <div className="mt-12 w-[520px]">
 
-              {/* TOP INFO */}
+              {/* INFO */}
 
               <div className="flex items-center justify-between mb-4">
 
