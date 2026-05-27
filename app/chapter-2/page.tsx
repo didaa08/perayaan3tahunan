@@ -1,10 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 
 export default function Chapter2Page() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  const router = useRouter();
 
   const [progress, setProgress] = useState(0);
   const [revealed, setRevealed] = useState(false);
@@ -23,6 +26,7 @@ export default function Chapter2Page() {
     canvas.height = height;
 
     let isDrawing = false;
+    let alreadyRevealed = false;
 
     // =========================
     // DRAW DREAMY SCRATCH LAYER
@@ -47,9 +51,9 @@ export default function Chapter2Page() {
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, width, height);
 
-      // SOFT GRAIN
+      // GRAIN
       for (let i = 0; i < 12000; i++) {
-        const alpha = Math.random() * 0.06;
+        const alpha = Math.random() * 0.05;
 
         ctx.fillStyle = `rgba(255,255,255,${alpha})`;
 
@@ -61,7 +65,7 @@ export default function Chapter2Page() {
         );
       }
 
-      // DIAGONAL SHIMMER
+      // SHIMMER LINES
       for (let i = -height; i < width; i += 90) {
         ctx.beginPath();
 
@@ -69,7 +73,7 @@ export default function Chapter2Page() {
         ctx.lineTo(i + 220, height);
 
         ctx.strokeStyle =
-          "rgba(255,255,255,0.07)";
+          "rgba(255,255,255,0.06)";
 
         ctx.lineWidth = 24;
 
@@ -99,7 +103,7 @@ export default function Chapter2Page() {
       ctx.fillStyle = glow;
       ctx.fillRect(0, 0, width, height);
 
-      // TEXT
+      // TITLE
       ctx.textAlign = "center";
 
       ctx.fillStyle = "rgba(255,255,255,0.92)";
@@ -111,7 +115,8 @@ export default function Chapter2Page() {
         220
       );
 
-      ctx.fillStyle = "rgba(255,255,255,0.5)";
+      // SUBTEXT
+      ctx.fillStyle = "rgba(255,255,255,0.55)";
       ctx.font = "20px sans-serif";
 
       ctx.fillText(
@@ -120,6 +125,7 @@ export default function Chapter2Page() {
         270
       );
 
+      // SMALL TEXT
       ctx.fillStyle = "rgba(255,255,255,0.25)";
       ctx.font = "14px sans-serif";
 
@@ -191,7 +197,7 @@ export default function Chapter2Page() {
     };
 
     // =========================
-    // REVEAL PERCENTAGE
+    // CALCULATE REVEAL
     // =========================
     const calculateReveal = () => {
       const imageData = ctx.getImageData(
@@ -221,9 +227,15 @@ export default function Chapter2Page() {
 
       setProgress(rounded);
 
-      if (percentage > 48) {
+      if (
+        percentage > 48 &&
+        !alreadyRevealed
+      ) {
+        alreadyRevealed = true;
+
         setRevealed(true);
 
+        // CLEAR SCRATCH
         setTimeout(() => {
           ctx.clearRect(
             0,
@@ -231,7 +243,12 @@ export default function Chapter2Page() {
             width,
             height
           );
-        }, 350);
+        }, 300);
+
+        // AUTO REDIRECT
+        setTimeout(() => {
+          router.push("/video");
+        }, 2200);
       }
     };
 
@@ -319,44 +336,45 @@ export default function Chapter2Page() {
         move
       );
     };
-  }, []);
+  }, [router]);
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#09090b] flex items-center justify-center px-6">
+    <motion.main
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 1 }}
+      className="
+        relative
+        min-h-screen
+        overflow-hidden
+        bg-[#09090b]
+        flex
+        items-center
+        justify-center
+        px-6
+      "
+    >
 
       {/* ========================= */}
       {/* BACKGROUND */}
       {/* ========================= */}
-      <div className="absolute inset-0">
 
-        <img
-          src="/images/bg.jpeg"
-          className="
-            w-full
-            h-full
-            object-cover
-            grayscale
-            opacity-30
-          "
-        />
+      <div className="absolute inset-0 bg-[#09090b]" />
 
-        {/* DARK OVERLAY */}
-        <div className="absolute inset-0 bg-black/55" />
+      {/* LEFT GLOW */}
+      <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-pink-500/20 blur-[180px] rounded-full" />
 
-        {/* LEFT GLOW */}
-        <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-pink-400/20 blur-[140px]" />
+      {/* RIGHT GLOW */}
+      <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-violet-500/20 blur-[180px] rounded-full" />
 
-        {/* RIGHT GLOW */}
-        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-violet-400/20 blur-[140px]" />
-
-      </div>
-
-      {/* FLOATING GLOW */}
-      <div className="absolute w-[700px] h-[700px] rounded-full bg-white/5 blur-[180px]" />
+      {/* CENTER LIGHT */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.04),transparent_60%)]" />
 
       {/* ========================= */}
       {/* CARD */}
       {/* ========================= */}
+
       <motion.div
         initial={{
           opacity: 0,
@@ -387,7 +405,10 @@ export default function Chapter2Page() {
         {/* INNER LIGHT */}
         <div className="absolute inset-0 bg-gradient-to-br from-white/[0.06] to-transparent" />
 
+        {/* ========================= */}
         {/* CONTENT */}
+        {/* ========================= */}
+
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-white px-10">
 
           <AnimatePresence mode="wait">
@@ -395,15 +416,9 @@ export default function Chapter2Page() {
             {!revealed ? (
               <motion.div
                 key="locked"
-                initial={{
-                  opacity: 0,
-                }}
-                animate={{
-                  opacity: 1,
-                }}
-                exit={{
-                  opacity: 0,
-                }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 className="text-center"
               >
 
@@ -433,6 +448,7 @@ export default function Chapter2Page() {
                 </p>
 
                 {/* BARCODE CARD */}
+
                 <div
                   className="
                     mt-12
@@ -450,7 +466,7 @@ export default function Chapter2Page() {
                   </div>
 
                   <img
-                    src="/images/barcode.png"
+                    src="https://barcode.tec-it.com/barcode.ashx?data=CHAPTER02&type=Code128"
                     alt="barcode"
                     className="
                       w-[380px]
@@ -466,6 +482,7 @@ export default function Chapter2Page() {
                 </div>
 
                 {/* PROGRESS */}
+
                 <div className="mt-10 w-[260px] mx-auto">
 
                   <div className="h-[2px] bg-white/10 rounded-full overflow-hidden">
@@ -523,31 +540,8 @@ export default function Chapter2Page() {
                 </h1>
 
                 <p className="mt-6 text-white/55 text-lg">
-                  continue to the hidden chapter
+                  opening hidden video...
                 </p>
-
-                <a
-                  href="/video"
-                  className="
-                    mt-12
-                    inline-flex
-                    items-center
-                    justify-center
-                    px-10
-                    py-5
-                    rounded-full
-                    bg-white/[0.08]
-                    border border-white/10
-                    backdrop-blur-xl
-                    text-white
-                    text-lg
-                    hover:bg-white/[0.12]
-                    transition-all
-                    duration-300
-                  "
-                >
-                  Open Video
-                </a>
 
               </motion.div>
             )}
@@ -559,6 +553,7 @@ export default function Chapter2Page() {
         {/* ========================= */}
         {/* SCRATCH CANVAS */}
         {/* ========================= */}
+
         <canvas
           ref={canvasRef}
           className="
@@ -571,6 +566,4 @@ export default function Chapter2Page() {
 
       </motion.div>
 
-    </main>
-  );
-}
+    </motion.main>
