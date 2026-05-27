@@ -8,8 +8,6 @@ export default function Chapter2Page() {
 
   const [progress, setProgress] = useState(0);
   const [revealed, setRevealed] = useState(false);
-  const [showVideo, setShowVideo] =
-    useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -238,20 +236,12 @@ export default function Chapter2Page() {
 
         setRevealed(true);
 
-        // CLEAR SCRATCH
-        setTimeout(() => {
-          ctx.clearRect(
-            0,
-            0,
-            width,
-            height
-          );
-        }, 400);
-
-        // SHOW VIDEO
-        setTimeout(() => {
-          setShowVideo(true);
-        }, 1200);
+        ctx.clearRect(
+          0,
+          0,
+          width,
+          height
+        );
       }
     };
 
@@ -343,380 +333,311 @@ export default function Chapter2Page() {
   }, []);
 
   return (
-    <>
-      <motion.main
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
+    <motion.main
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1 }}
+      className="
+        relative
+        min-h-screen
+        overflow-hidden
+        bg-[#07070a]
+        flex
+        items-center
+        justify-center
+      "
+    >
+
+      {/* BACKGROUND */}
+
+      <div className="absolute inset-0 bg-[#07070a]" />
+
+      {/* LEFT GLOW */}
+      <div className="absolute left-[-10%] top-[10%] w-[700px] h-[700px] rounded-full bg-pink-500/20 blur-[180px]" />
+
+      {/* RIGHT GLOW */}
+      <div className="absolute right-[-10%] bottom-[0%] w-[700px] h-[700px] rounded-full bg-violet-500/20 blur-[180px]" />
+
+      {/* PARTICLES */}
+      <div className="absolute w-3 h-3 rounded-full bg-pink-300 top-[22%] left-[8%] blur-[2px]" />
+      <div className="absolute w-4 h-4 rounded-full bg-violet-300 bottom-[20%] right-[12%] blur-[2px]" />
+      <div className="absolute w-2 h-2 rounded-full bg-white/70 top-[70%] left-[20%] blur-[1px]" />
+
+      {/* MAIN CARD */}
+
+      <motion.div
+        initial={{
+          opacity: 0,
+          y: 20,
+          scale: 0.97,
+        }}
+        animate={{
+          opacity: 1,
+          y: 0,
+          scale: 1,
+        }}
+        transition={{
+          duration: 1,
+        }}
         className="
           relative
-          min-h-screen
+          w-[980px]
+          h-[690px]
+          rounded-[42px]
           overflow-hidden
-          bg-[#07070a]
-          flex
-          items-center
-          justify-center
+          border border-white/10
+          bg-white/[0.03]
+          backdrop-blur-2xl
+          shadow-[0_0_100px_rgba(255,255,255,0.04)]
         "
       >
 
-        {/* BACKGROUND */}
+        {/* INNER LIGHT */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent" />
 
-        <div className="absolute inset-0 bg-[#07070a]" />
+        {/* CONTENT */}
 
-        {/* LEFT GLOW */}
-        <div className="absolute left-[-10%] top-[10%] w-[700px] h-[700px] rounded-full bg-pink-500/20 blur-[180px]" />
+        <div className="absolute inset-0 z-10 flex flex-col items-center pt-[70px] text-white">
 
-        {/* RIGHT GLOW */}
-        <div className="absolute right-[-10%] bottom-[0%] w-[700px] h-[700px] rounded-full bg-violet-500/20 blur-[180px]" />
+          <AnimatePresence mode="wait">
 
-        {/* PARTICLES */}
-        <div className="absolute w-3 h-3 rounded-full bg-pink-300 top-[22%] left-[8%] blur-[2px]" />
-        <div className="absolute w-4 h-4 rounded-full bg-violet-300 bottom-[20%] right-[12%] blur-[2px]" />
-        <div className="absolute w-2 h-2 rounded-full bg-white/70 top-[70%] left-[20%] blur-[1px]" />
+            {!revealed ? (
+              <motion.div
+                key="locked"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="text-center"
+              >
 
-        {/* MAIN CARD */}
+                {/* CHAPTER */}
+                <p className="uppercase tracking-[0.7em] text-white/45 text-[12px] mb-8">
+                  Chapter 02
+                </p>
 
-        <motion.div
-          initial={{
-            opacity: 0,
-            y: 20,
-            scale: 0.97,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-            scale: 1,
-          }}
-          transition={{
-            duration: 1,
-          }}
-          className="
-            relative
-            w-[980px]
-            h-[690px]
-            rounded-[42px]
-            overflow-hidden
-            border border-white/10
-            bg-white/[0.03]
-            backdrop-blur-2xl
-            shadow-[0_0_100px_rgba(255,255,255,0.04)]
-          "
-        >
+                {/* TITLE */}
+                <h1
+                  className="
+                    text-[92px]
+                    italic
+                    leading-[0.9]
+                    font-light
+                    tracking-[-0.05em]
+                    text-white
+                  "
+                >
+                  Hidden
+                  <br />
+                  Memories
+                </h1>
 
-          {/* INNER LIGHT */}
-          <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent" />
+                {/* SUBTEXT */}
+                <p className="mt-8 text-white/55 text-[18px] leading-relaxed">
+                  some memories were never meant
+                  <br />
+                  to appear all at once
+                </p>
 
-          {/* CONTENT */}
+                {/* MEMORY CARD */}
 
-          <div className="absolute inset-0 z-10 flex flex-col items-center pt-[70px] text-white">
-
-            <AnimatePresence mode="wait">
-
-              {!revealed ? (
-                <motion.div
-                  key="locked"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="text-center"
+                <div
+                  className="
+                    relative
+                    mt-14
+                    w-[520px]
+                    h-[330px]
+                    rounded-[32px]
+                    overflow-hidden
+                    border border-white/10
+                    bg-white/[0.04]
+                    backdrop-blur-xl
+                    mx-auto
+                  "
                 >
 
-                  {/* CHAPTER */}
-                  <p className="uppercase tracking-[0.7em] text-white/45 text-[12px] mb-8">
-                    Chapter 02
-                  </p>
+                  {/* TOP LABEL */}
 
-                  {/* TITLE */}
-                  <h1
-                    className="
-                      text-[92px]
-                      italic
-                      leading-[0.9]
-                      font-light
-                      tracking-[-0.05em]
-                      text-white
-                    "
-                  >
-                    Hidden
-                    <br />
-                    Memories
-                  </h1>
+                  <div className="absolute top-7 left-0 right-0 text-center z-20">
 
-                  {/* SUBTEXT */}
-                  <p className="mt-8 text-white/55 text-[18px] leading-relaxed">
-                    some memories were never meant
-                    <br />
-                    to appear all at once
-                  </p>
-
-                  {/* MEMORY CARD */}
-
-                  <div
-                    className="
-                      relative
-                      mt-14
-                      w-[520px]
-                      h-[330px]
-                      rounded-[32px]
-                      overflow-hidden
-                      border border-white/10
-                      bg-white/[0.04]
-                      backdrop-blur-xl
-                      mx-auto
-                    "
-                  >
-
-                    {/* TOP LABEL */}
-
-                    <div className="absolute top-7 left-0 right-0 text-center z-20">
-
-                      <div className="text-[12px] tracking-[0.6em] text-pink-100/70">
-                        MEMORY ACCESS
-                      </div>
-
+                    <div className="text-[12px] tracking-[0.6em] text-pink-100/70">
+                      MEMORY ACCESS
                     </div>
 
-                    {/* PHOTO */}
+                  </div>
 
-                    <div className="absolute inset-0 p-10 pt-16">
+                  {/* PHOTO */}
 
-                      <div className="relative w-full h-full rounded-[20px] overflow-hidden">
+                  <div className="absolute inset-0 p-10 pt-16">
 
-                        <img
-                          src="/images/memory.jpg"
-                          alt="memory"
-                          className="
-                            w-full
-                            h-full
-                            object-cover
-                            grayscale
-                          "
-                        />
+                    <div className="relative w-full h-full rounded-[20px] overflow-hidden">
 
-                        <div className="absolute inset-0 bg-black/20" />
+                      <img
+                        src="/images/memory.jpg"
+                        alt="memory"
+                        className="
+                          w-full
+                          h-full
+                          object-cover
+                          grayscale
+                        "
+                      />
 
-                      </div>
-
-                    </div>
-
-                    {/* BOTTOM TEXT */}
-
-                    <div className="absolute bottom-7 left-0 right-0 text-center">
-
-                      <div className="text-[12px] tracking-[0.45em] text-white/40">
-                        CHAPTER_02
-                      </div>
+                      <div className="absolute inset-0 bg-black/20" />
 
                     </div>
 
                   </div>
 
-                  {/* REVEAL BAR */}
+                  {/* BOTTOM TEXT */}
 
-                  <div className="mt-12 w-[520px] mx-auto">
+                  <div className="absolute bottom-7 left-0 right-0 text-center">
 
-                    <div className="h-[5px] rounded-full bg-white/10 overflow-hidden">
-
-                      <motion.div
-                        animate={{
-                          width: `${progress}%`,
-                        }}
-                        className="
-                          h-full
-                          rounded-full
-                          bg-gradient-to-r
-                          from-pink-200
-                          to-white
-                        "
-                      />
-
+                    <div className="text-[12px] tracking-[0.45em] text-white/40">
+                      CHAPTER_02
                     </div>
 
-                    <p className="mt-5 text-[13px] tracking-[0.5em] text-white/35">
-                      REVEAL {progress}%
+                  </div>
+
+                </div>
+
+                {/* REVEAL STATUS */}
+
+                <div className="mt-12 w-[520px] mx-auto">
+
+                  {/* TOP INFO */}
+                  <div className="flex items-center justify-between mb-4">
+
+                    <p className="text-[11px] tracking-[0.45em] text-white/35 uppercase">
+                      Scratch Progress
+                    </p>
+
+                    <p className="text-[11px] tracking-[0.3em] text-pink-100/70">
+                      {progress}%
                     </p>
 
                   </div>
 
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="revealed"
-                  initial={{
-                    opacity: 0,
-                    scale: 0.95,
-                  }}
-                  animate={{
-                    opacity: 1,
-                    scale: 1,
-                  }}
-                  transition={{
-                    duration: 0.7,
-                  }}
-                  className="text-center pt-[120px]"
+                  {/* BAR WRAPPER */}
+                  <div className="relative h-[8px] rounded-full overflow-hidden bg-white/10">
+
+                    {/* GLOW */}
+                    <div className="absolute inset-0 bg-white/[0.03]" />
+
+                    {/* ACTIVE BAR */}
+                    <motion.div
+                      animate={{
+                        width: `${progress}%`,
+                      }}
+                      transition={{
+                        ease: "easeOut",
+                        duration: 0.2,
+                      }}
+                      className="
+                        relative
+                        h-full
+                        rounded-full
+                        bg-gradient-to-r
+                        from-pink-200
+                        via-white
+                        to-violet-200
+                      "
+                    >
+
+                      {/* SHINE */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent animate-pulse" />
+
+                    </motion.div>
+
+                  </div>
+
+                  {/* BOTTOM TEXT */}
+                  <div className="mt-4 text-center">
+
+                    {progress < 30 && (
+                      <p className="text-white/25 text-[12px] tracking-[0.35em] uppercase">
+                        memory still hidden
+                      </p>
+                    )}
+
+                    {progress >= 30 &&
+                      progress < 70 && (
+                        <p className="text-white/35 text-[12px] tracking-[0.35em] uppercase">
+                          memory revealing...
+                        </p>
+                      )}
+
+                    {progress >= 70 && (
+                      <p className="text-pink-100/70 text-[12px] tracking-[0.35em] uppercase">
+                        memory unlocked
+                      </p>
+                    )}
+
+                  </div>
+
+                </div>
+
+              </motion.div>
+            ) : (
+              <motion.div
+                key="revealed"
+                initial={{
+                  opacity: 0,
+                  scale: 0.95,
+                }}
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                }}
+                transition={{
+                  duration: 0.7,
+                }}
+                className="text-center pt-[120px]"
+              >
+
+                <p className="uppercase tracking-[0.7em] text-white/40 text-[12px] mb-7">
+                  Access Granted
+                </p>
+
+                <h1
+                  className="
+                    text-[88px]
+                    italic
+                    leading-[0.9]
+                    font-light
+                    tracking-[-0.05em]
+                    text-white
+                  "
                 >
+                  Memory
+                  <br />
+                  Unlocked
+                </h1>
 
-                  <p className="uppercase tracking-[0.7em] text-white/40 text-[12px] mb-7">
-                    Access Granted
-                  </p>
+                <p className="mt-8 text-white/50 text-[18px]">
+                  hidden memory successfully revealed
+                </p>
 
-                  <h1
-                    className="
-                      text-[88px]
-                      italic
-                      leading-[0.9]
-                      font-light
-                      tracking-[-0.05em]
-                      text-white
-                    "
-                  >
-                    Memory
-                    <br />
-                    Unlocked
-                  </h1>
+              </motion.div>
+            )}
 
-                  <p className="mt-8 text-white/50 text-[18px]">
-                    opening hidden video...
-                  </p>
+          </AnimatePresence>
 
-                </motion.div>
-              )}
+        </div>
 
-            </AnimatePresence>
+        {/* SCRATCH CANVAS */}
 
-          </div>
+        <canvas
+          ref={canvasRef}
+          className="
+            absolute
+            inset-0
+            z-20
+            cursor-crosshair
+          "
+        />
 
-          {/* SCRATCH CANVAS */}
+      </motion.div>
 
-          <canvas
-            ref={canvasRef}
-            className="
-              absolute
-              inset-0
-              z-20
-              cursor-crosshair
-            "
-          />
-
-        </motion.div>
-
-      </motion.main>
-
-      {/* ========================= */}
-      {/* VIDEO POPUP */}
-      {/* ========================= */}
-
-      <AnimatePresence>
-
-        {showVideo && (
-
-          <motion.div
-            initial={{
-              opacity: 0,
-            }}
-            animate={{
-              opacity: 1,
-            }}
-            exit={{
-              opacity: 0,
-            }}
-            className="
-              fixed
-              inset-0
-              z-[999]
-              bg-black/80
-              backdrop-blur-xl
-              flex
-              items-center
-              justify-center
-              p-6
-            "
-          >
-
-            {/* BACKDROP */}
-            <div
-              className="absolute inset-0"
-              onClick={() =>
-                setShowVideo(false)
-              }
-            />
-
-            {/* VIDEO CARD */}
-
-            <motion.div
-              initial={{
-                opacity: 0,
-                y: 30,
-                scale: 0.96,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-                scale: 1,
-              }}
-              transition={{
-                duration: 0.6,
-              }}
-              className="
-                relative
-                w-full
-                max-w-5xl
-                rounded-[32px]
-                overflow-hidden
-                border border-white/10
-                bg-black
-                shadow-[0_0_120px_rgba(255,255,255,0.08)]
-              "
-            >
-
-              {/* VIDEO */}
-
-              <video
-                autoPlay
-                controls
-                className="
-                  w-full
-                  h-full
-                  object-cover
-                "
-              >
-                <source
-                  src="/videos/chapter2.mp4"
-                  type="video/mp4"
-                />
-              </video>
-
-              {/* CLOSE BUTTON */}
-
-              <button
-                onClick={() =>
-                  setShowVideo(false)
-                }
-                className="
-                  absolute
-                  top-5
-                  right-5
-                  w-11
-                  h-11
-                  rounded-full
-                  bg-black/50
-                  backdrop-blur-md
-                  text-white
-                  text-xl
-                  hover:bg-black/70
-                  transition-all
-                "
-              >
-                ✕
-              </button>
-
-            </motion.div>
-
-          </motion.div>
-
-        )}
-
-      </AnimatePresence>
-    </>
+    </motion.main>
   );
 }
