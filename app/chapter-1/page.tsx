@@ -1,164 +1,211 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
 
-export default function ChapterOnePage() {
-  const [showQuote, setShowQuote] = useState(false);
+const memories = [
+  "/images/memories/01.JPEG",
+  "/images/memories/02.JPEG",
+  "/images/memories/03.JPEG",
+  "/images/memories/04.JPEG",
+];
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowQuote(true);
-    }, 1200);
+export default function Chapter1Page() {
+  const [openCamera, setOpenCamera] = useState(false);
+  const [current, setCurrent] = useState(0);
 
-    return () => clearTimeout(timer);
-  }, []);
+  const nextSlide = () => {
+    setCurrent((prev) => (prev + 1) % memories.length);
+  };
+
+  const prevSlide = () => {
+    setCurrent((prev) =>
+      prev === 0 ? memories.length - 1 : prev - 1
+    );
+  };
 
   return (
-    <main className="min-h-screen bg-black text-white relative overflow-hidden px-6 py-24">
+    <main className="relative h-screen w-full overflow-hidden bg-[#0f0c09] text-white">
 
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-zinc-950 to-black" />
-
-      <div className="absolute w-[500px] h-[500px] bg-pink-500/10 blur-3xl rounded-full top-[-100px] left-[-100px]" />
-
-      <div className="absolute w-[400px] h-[400px] bg-purple-500/10 blur-3xl rounded-full bottom-[-100px] right-[-100px]" />
-
-      <div className="relative z-10 max-w-6xl mx-auto">
-
-        <a
-          href="/chapters"
-          className="text-sm text-gray-400 hover:text-white transition"
-        >
-          ← Back to Chapters
-        </a>
-
-        <div className="mt-16 mb-28">
-
-          <p className="tracking-[0.4em] uppercase text-sm text-gray-500 mb-6 animate-pulse">
-            Chapter 1
-          </p>
-
-          <h1 className="text-6xl md:text-8xl font-serif italic mb-8 leading-none">
-            Recall Memories
-          </h1>
-
-          <div
-            className={`
-              transition-all
-              duration-1000
-              ${
-                showQuote
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-5"
-              }
-            `}
-          >
-            <p className="text-gray-300 text-lg leading-relaxed max-w-2xl">
-              some moments quietly disappeared into time,
-              <br />
-              but somehow...
-              <span className="text-white"> us never did ✨</span>
-            </p>
-          </div>
-
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-12">
-
-          <MemoryCard
-            image="/images/Chapter1.JPG"
-            rotation="-rotate-2"
-            caption="the beginning of our chaos"
-          />
-
-          <MemoryCard
-            image="/images/Chapter2.jpg"
-            rotation="rotate-2"
-            caption="still one of my favorite days"
-          />
-
-          <MemoryCard
-            image="/images/Chapter3.jpeg"
-            rotation="rotate-1"
-            caption="us against the world"
-          />
-
-          <MemoryCard
-            image="/images/BG.jpeg"
-            rotation="-rotate-1"
-            caption="and somehow we stayed"
-          />
-
-        </div>
-
-        <div className="mt-32 text-center">
-
-          <p className="text-gray-500 italic text-lg mb-6">
-            “every memory became a small universe of its own.”
-          </p>
-
-          <div className="w-24 h-[1px] bg-white/20 mx-auto mb-6" />
-
-          <p className="text-gray-600 text-sm tracking-[0.3em] uppercase">
-            End of Chapter 1
-          </p>
-
-        </div>
-
-      </div>
-
-      <audio autoPlay loop>
-        <source src="/music/ambient.mp3" type="audio/mp3" />
-      </audio>
-
-    </main>
-  );
-}
-
-function MemoryCard({
-  image,
-  rotation,
-  caption,
-}: {
-  image: string;
-  rotation: string;
-  caption: string;
-}) {
-  return (
-    <div
-      className={`
-        bg-zinc-900/80
-        backdrop-blur-xl
-        p-4
-        rounded-[32px]
-        shadow-2xl
-        transition
-        duration-500
-        hover:scale-[1.03]
-        hover:rotate-0
-        group
-        ${rotation}
-      `}
-    >
-
+      {/* Background */}
       <div
-        className="
-          h-[500px]
-          rounded-[24px]
-          bg-cover
-          bg-center
-          transition
-          duration-700
-          group-hover:scale-[1.02]
-        "
+        className="absolute inset-0 bg-cover bg-center scale-105"
         style={{
-          backgroundImage: `url(${image})`,
+          backgroundImage: "url('/images/background.jpg')",
         }}
       />
 
-      <p className="text-gray-400 text-sm mt-5 px-2 italic">
-        {caption}
-      </p>
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-black/65" />
 
-    </div>
+      {/* Vignette */}
+      <div className="absolute inset-0 bg-black/40 [mask-image:radial-gradient(circle,transparent_35%,black_100%)]" />
+
+      {/* Warm Glow */}
+      <motion.div
+        animate={{
+          opacity: [0.4, 0.55, 0.4],
+        }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+        }}
+        className="absolute top-10 right-24 h-[500px] w-[500px] rounded-full bg-orange-200/20 blur-3xl"
+      />
+
+      {/* Title */}
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.5 }}
+        className="absolute left-16 top-14 z-20"
+      >
+        <h1 className="text-7xl font-light tracking-wide">
+          Archive of Us
+        </h1>
+
+        <p className="mt-4 text-sm tracking-wide text-gray-300">
+          some moments never stopped playing.
+        </p>
+      </motion.div>
+
+      {/* CAMERA */}
+      <motion.div
+        whileHover={{
+          scale: 1.06,
+          rotate: -4,
+          y: -8,
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 180,
+        }}
+        onClick={() => setOpenCamera(true)}
+        className="absolute bottom-24 left-10 z-20 cursor-pointer"
+      >
+        <img
+          src="/images/camera.jpg"
+          alt="camera"
+          className="w-[320px] object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.8)]"
+        />
+
+        <p className="mt-4 text-center text-sm tracking-widest text-gray-300 uppercase">
+          camera
+        </p>
+      </motion.div>
+
+      {/* LETTER */}
+      <motion.div
+        whileHover={{
+          scale: 1.05,
+          rotate: 3,
+          y: -8,
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 180,
+        }}
+        className="absolute bottom-24 left-[38%] z-20 cursor-pointer"
+      >
+        <img
+          src="/images/letter.png"
+          alt="letter"
+          className="w-[300px] object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.8)]"
+        />
+
+        <p className="mt-4 text-center text-sm tracking-widest text-gray-300 uppercase">
+          letter
+        </p>
+      </motion.div>
+
+      {/* LAPTOP */}
+      <motion.div
+        whileHover={{
+          scale: 1.04,
+          y: -8,
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 180,
+        }}
+        className="absolute bottom-20 right-8 z-20 cursor-pointer"
+      >
+        <img
+          src="/images/laptop.png"
+          alt="laptop"
+          className="w-[420px] object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.9)]"
+        />
+
+        <p className="mt-4 text-center text-sm tracking-widest text-gray-300 uppercase">
+          future chapters
+        </p>
+      </motion.div>
+
+      {/* Bottom Text */}
+      <div className="absolute bottom-6 left-1/2 z-20 -translate-x-1/2">
+        <p className="text-sm tracking-[0.3em] text-gray-400">
+          best experienced with headphones
+        </p>
+      </div>
+
+      {/* CAMERA MODAL */}
+      <AnimatePresence>
+        {openCamera && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md"
+          >
+
+            {/* Close */}
+            <button
+              onClick={() => setOpenCamera(false)}
+              className="absolute right-10 top-10 text-4xl text-white"
+            >
+              ×
+            </button>
+
+            {/* Previous */}
+            <button
+              onClick={prevSlide}
+              className="absolute left-10 text-5xl text-white"
+            >
+              ←
+            </button>
+
+            {/* Image */}
+            <motion.img
+              key={current}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4 }}
+              src={memories[current]}
+              alt="memory"
+              className="max-h-[75vh] rounded-xl object-cover shadow-2xl"
+            />
+
+            {/* Next */}
+            <button
+              onClick={nextSlide}
+              className="absolute right-10 text-5xl text-white"
+            >
+              →
+            </button>
+
+            {/* Caption */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.7 }}
+              className="absolute bottom-16 text-sm tracking-[0.3em] text-gray-300 uppercase"
+            >
+              our tiny memories
+            </motion.p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+    </main>
   );
 }
