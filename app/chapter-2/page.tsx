@@ -1,16 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Chapter2Page() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const router = useRouter();
-
-  const [progress, setProgress] = useState(0);
   const [revealed, setRevealed] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -19,23 +16,21 @@ export default function Chapter2Page() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const width = 850;
+    const width = 900;
     const height = 500;
 
     canvas.width = width;
     canvas.height = height;
 
     let isDrawing = false;
-    let alreadyRevealed = false;
 
     // =========================
-    // DRAW SCRATCH LAYER
+    // DRAW HOLOGRAM LAYER
     // =========================
-
-    const drawLayer = () => {
+    const drawScratchLayer = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // PEARL GRADIENT
+      // METAL GRADIENT
       const gradient = ctx.createLinearGradient(
         0,
         0,
@@ -43,40 +38,40 @@ export default function Chapter2Page() {
         height
       );
 
-      gradient.addColorStop(0, "#d4d4d8");
-      gradient.addColorStop(0.25, "#f4f4f5");
-      gradient.addColorStop(0.5, "#e4e4e7");
-      gradient.addColorStop(0.75, "#fafafa");
-      gradient.addColorStop(1, "#d4d4d8");
+      gradient.addColorStop(0, "#7c8aa0");
+      gradient.addColorStop(0.2, "#d8dee9");
+      gradient.addColorStop(0.4, "#8b9db5");
+      gradient.addColorStop(0.6, "#f1f5f9");
+      gradient.addColorStop(0.8, "#94a3b8");
+      gradient.addColorStop(1, "#64748b");
 
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, width, height);
 
-      // GRAIN
-      for (let i = 0; i < 12000; i++) {
-        const alpha = Math.random() * 0.05;
+      // NOISE
+      for (let i = 0; i < 10000; i++) {
+        const alpha = Math.random() * 0.08;
 
         ctx.fillStyle = `rgba(255,255,255,${alpha})`;
 
         ctx.fillRect(
           Math.random() * width,
           Math.random() * height,
-          1,
-          1
+          1.5,
+          1.5
         );
       }
 
-      // SHIMMER LINES
-      for (let i = -height; i < width; i += 90) {
+      // DIAGONAL SHINES
+      for (let i = -height; i < width; i += 80) {
         ctx.beginPath();
 
         ctx.moveTo(i, 0);
-        ctx.lineTo(i + 220, height);
+        ctx.lineTo(i + 200, height);
 
         ctx.strokeStyle =
-          "rgba(255,255,255,0.06)";
-
-        ctx.lineWidth = 24;
+          "rgba(255,255,255,0.05)";
+        ctx.lineWidth = 25;
 
         ctx.stroke();
       }
@@ -88,12 +83,12 @@ export default function Chapter2Page() {
         50,
         width / 2,
         height / 2,
-        280
+        300
       );
 
       glow.addColorStop(
         0,
-        "rgba(255,255,255,0.18)"
+        "rgba(255,255,255,0.22)"
       );
 
       glow.addColorStop(
@@ -104,58 +99,57 @@ export default function Chapter2Page() {
       ctx.fillStyle = glow;
       ctx.fillRect(0, 0, width, height);
 
-      // TITLE
+      // TEXT
+      ctx.fillStyle = "rgba(255,255,255,0.95)";
       ctx.textAlign = "center";
 
-      ctx.fillStyle = "rgba(255,255,255,0.92)";
-      ctx.font = "italic 62px serif";
+      ctx.font = "bold 56px sans-serif";
 
       ctx.fillText(
-        "Hidden Memories",
+        "SCRATCH TO REVEAL",
         width / 2,
-        220
+        215
       );
 
-      // SUBTEXT
-      ctx.fillStyle = "rgba(255,255,255,0.55)";
-      ctx.font = "18px sans-serif";
+      ctx.font = "20px sans-serif";
+
+      ctx.fillStyle = "rgba(255,255,255,0.7)";
 
       ctx.fillText(
-        "scratch slowly to reveal",
+        "chapter_2_memory_access",
         width / 2,
-        270
+        255
       );
 
-      // SMALL TEXT
-      ctx.fillStyle = "rgba(255,255,255,0.22)";
-      ctx.font = "13px sans-serif";
+      ctx.font = "14px sans-serif";
+
+      ctx.fillStyle = "rgba(255,255,255,0.35)";
 
       ctx.fillText(
-        "hold click and move gently",
+        "hold click and move slowly",
         width / 2,
-        405
+        410
       );
     };
 
-    drawLayer();
+    drawScratchLayer();
 
     // =========================
-    // SCRATCH EFFECT
+    // SCRATCH FUNCTION
     // =========================
-
     const scratch = (x: number, y: number) => {
       ctx.globalCompositeOperation =
         "destination-out";
 
-      for (let i = 0; i < 7; i++) {
+      for (let i = 0; i < 8; i++) {
         const offsetX =
-          (Math.random() - 0.5) * 26;
+          (Math.random() - 0.5) * 30;
 
         const offsetY =
-          (Math.random() - 0.5) * 26;
+          (Math.random() - 0.5) * 30;
 
         const radius =
-          Math.random() * 18 + 20;
+          Math.random() * 22 + 18;
 
         ctx.beginPath();
 
@@ -174,8 +168,7 @@ export default function Chapter2Page() {
     // =========================
     // GET POSITION
     // =========================
-
-    const getPosition = (
+    const getPos = (
       e: MouseEvent | TouchEvent
     ) => {
       const rect =
@@ -186,7 +179,6 @@ export default function Chapter2Page() {
           x:
             e.touches[0].clientX -
             rect.left,
-
           y:
             e.touches[0].clientY -
             rect.top,
@@ -200,9 +192,31 @@ export default function Chapter2Page() {
     };
 
     // =========================
-    // CALCULATE REVEAL
+    // EVENTS
     // =========================
+    const start = () => {
+      isDrawing = true;
+    };
 
+    const end = () => {
+      isDrawing = false;
+    };
+
+    const move = (
+      e: MouseEvent | TouchEvent
+    ) => {
+      if (!isDrawing) return;
+
+      const pos = getPos(e);
+
+      scratch(pos.x, pos.y);
+
+      calculateReveal();
+    };
+
+    // =========================
+    // REVEAL PERCENTAGE
+    // =========================
     const calculateReveal = () => {
       const imageData = ctx.getImageData(
         0,
@@ -227,19 +241,16 @@ export default function Chapter2Page() {
         (transparent / (width * height)) *
         100;
 
-      const rounded = Math.floor(percentage);
+      setProgress(
+        Math.min(
+          100,
+          Math.floor(percentage)
+        )
+      );
 
-      setProgress(rounded);
-
-      if (
-        percentage > 48 &&
-        !alreadyRevealed
-      ) {
-        alreadyRevealed = true;
-
+      if (percentage > 52) {
         setRevealed(true);
 
-        // CLEAR SCRATCH
         setTimeout(() => {
           ctx.clearRect(
             0,
@@ -248,38 +259,12 @@ export default function Chapter2Page() {
             height
           );
         }, 300);
-
-        // AUTO REDIRECT
-        setTimeout(() => {
-          router.push("/video");
-        }, 2200);
       }
     };
 
     // =========================
-    // EVENTS
+    // LISTENERS
     // =========================
-
-    const start = () => {
-      isDrawing = true;
-    };
-
-    const end = () => {
-      isDrawing = false;
-    };
-
-    const move = (
-      e: MouseEvent | TouchEvent
-    ) => {
-      if (!isDrawing) return;
-
-      const pos = getPosition(e);
-
-      scratch(pos.x, pos.y);
-
-      calculateReveal();
-    };
-
     canvas.addEventListener(
       "mousedown",
       start
@@ -341,49 +326,56 @@ export default function Chapter2Page() {
         move
       );
     };
-  }, [router]);
+  }, []);
 
   return (
-    <motion.main
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 1 }}
-      className="
-        relative
-        min-h-screen
-        overflow-hidden
-        bg-[#09090b]
-        flex
-        items-center
-        justify-center
-        px-6
-      "
-    >
+    <main className="relative min-h-screen bg-black overflow-hidden flex items-center justify-center px-5">
 
       {/* ========================= */}
       {/* BACKGROUND */}
       {/* ========================= */}
+      <div className="absolute inset-0 overflow-hidden">
 
-      <div className="absolute inset-0 bg-[#09090b]" />
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover scale-105 blur-[2px]"
+        >
+          <source
+            src="/chapter2.mp4"
+            type="video/mp4"
+          />
+        </video>
 
-      {/* LEFT GLOW */}
-      <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-pink-500/20 blur-[180px] rounded-full" />
+        <div className="absolute inset-0 bg-black/70" />
 
-      {/* RIGHT GLOW */}
-      <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-violet-500/20 blur-[180px] rounded-full" />
+        <div className="absolute inset-0 bg-cyan-500/10" />
 
-      {/* CENTER LIGHT */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.04),transparent_60%)]" />
+        <div
+          className="
+          absolute inset-0
+          opacity-[0.05]
+          mix-blend-screen
+          bg-[radial-gradient(circle_at_center,white_1px,transparent_1px)]
+          bg-[size:14px_14px]
+        "
+        />
+      </div>
+
+      {/* ========================= */}
+      {/* FLOATING GLOW */}
+      {/* ========================= */}
+      <div className="absolute w-[700px] h-[700px] bg-cyan-400/10 blur-[160px] rounded-full" />
 
       {/* ========================= */}
       {/* CARD */}
       {/* ========================= */}
-
       <motion.div
         initial={{
           opacity: 0,
-          y: 30,
+          y: 40,
           scale: 0.96,
         }}
         animate={{
@@ -396,130 +388,94 @@ export default function Chapter2Page() {
         }}
         className="
           relative
-          w-[850px]
+          w-[900px]
           h-[500px]
-          rounded-[40px]
+          rounded-[34px]
           overflow-hidden
           border border-white/10
-          bg-white/[0.04]
-          backdrop-blur-2xl
-          shadow-[0_0_80px_rgba(255,255,255,0.05)]
+          bg-white/[0.03]
+          backdrop-blur-xl
+          shadow-[0_0_120px_rgba(0,255,255,0.08)]
         "
       >
 
-        {/* INNER LIGHT */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/[0.06] to-transparent" />
+        {/* INSIDE LIGHT */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent" />
 
-        {/* ========================= */}
         {/* CONTENT */}
-        {/* ========================= */}
-
-        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-white px-10">
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-white">
 
           <AnimatePresence mode="wait">
 
             {!revealed ? (
               <motion.div
                 key="locked"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
+                initial={{
+                  opacity: 0,
+                }}
+                animate={{
+                  opacity: 1,
+                }}
+                exit={{
+                  opacity: 0,
+                }}
                 className="text-center"
               >
 
-                {/* CHAPTER */}
-                <p className="uppercase tracking-[0.45em] text-white/35 text-[11px] mb-6">
+                <p className="uppercase tracking-[0.7em] text-cyan-200/50 text-xs mb-5">
                   Chapter 02
                 </p>
 
-                {/* TITLE */}
-                <h1
-                  className="
-                    text-[72px]
-                    italic
-                    leading-[0.95]
-                    font-light
-                    tracking-[-0.04em]
-                    text-white
-                  "
-                >
+                <h1 className="text-7xl font-black leading-none mb-6">
                   Hidden
                   <br />
-                  Memories
+                  Memory
                 </h1>
 
-                {/* SUBTEXT */}
-                <p className="mt-6 text-white/50 text-base leading-relaxed">
-                  some memories were never meant
-                  <br />
-                  to appear all at once
+                <p className="text-white/45 text-lg mb-12">
+                  Scratch slowly to reveal access
                 </p>
 
-                {/* MEMORY PHOTO */}
-                <div
-                  className="
-                    relative
-                    mt-12
-                    w-[420px]
-                    h-[250px]
-                    rounded-[26px]
-                    overflow-hidden
-                    border border-white/10
-                    bg-white/[0.04]
-                    backdrop-blur-xl
-                  "
-                >
+                {/* BARCODE */}
+                <div className="flex flex-col items-center">
 
-                  {/* PHOTO */}
-                  <img
-                    src="/images/memory.jpg"
-                    alt="memory"
-                    className="
-                      absolute
-                      inset-0
-                      w-full
-                      h-full
-                      object-cover
-                      grayscale
-                      opacity-80
-                    "
-                  />
+                  <div className="tracking-[0.6em] text-xs text-cyan-100/60 mb-4">
+                    MEMORY ACCESS CODE
+                  </div>
 
-                  {/* OVERLAY */}
-                  <div className="absolute inset-0 bg-black/30" />
+                  <div className="bg-white rounded-2xl px-8 py-6 shadow-2xl">
 
-                  {/* LABEL */}
-                  <div className="absolute bottom-0 left-0 right-0 p-5">
+                    <img
+                      src="/images/barcode.png"
+                      alt="barcode"
+                      className="w-[420px]"
+                    />
 
-                    <div className="text-[10px] tracking-[0.4em] text-white/40 mb-2">
-                      PRIVATE MEMORY
-                    </div>
+                  </div>
 
-                    <div className="text-white/85 text-lg italic">
-                      June 1st
-                    </div>
-
+                  <div className="mt-4 text-white/35 text-sm tracking-[0.35em]">
+                    CHAPTER_02
                   </div>
 
                 </div>
 
                 {/* PROGRESS */}
-                <div className="mt-10 w-[260px] mx-auto">
+                <div className="mt-12 flex flex-col items-center">
 
-                  <div className="h-[2px] bg-white/10 rounded-full overflow-hidden">
+                  <div className="w-[280px] h-[5px] rounded-full bg-white/10 overflow-hidden">
 
                     <motion.div
                       animate={{
                         width: `${progress}%`,
                       }}
-                      className="h-full bg-white/70"
+                      className="h-full bg-cyan-200"
                     />
 
                   </div>
 
-                  <p className="mt-4 text-xs tracking-[0.4em] text-white/25">
-                    REVEAL {progress}%
-                  </p>
+                  <div className="mt-3 text-white/35 text-xs tracking-[0.4em]">
+                    REVEAL_PROGRESS {progress}%
+                  </div>
 
                 </div>
 
@@ -529,7 +485,7 @@ export default function Chapter2Page() {
                 key="revealed"
                 initial={{
                   opacity: 0,
-                  scale: 0.94,
+                  scale: 0.92,
                 }}
                 animate={{
                   opacity: 1,
@@ -541,28 +497,41 @@ export default function Chapter2Page() {
                 className="text-center"
               >
 
-                <p className="uppercase tracking-[0.5em] text-white/35 text-xs mb-6">
+                <p className="uppercase tracking-[0.7em] text-cyan-200/50 text-xs mb-5">
                   Access Granted
                 </p>
 
-                <h1
-                  className="
-                    text-[72px]
-                    italic
-                    leading-[0.95]
-                    font-light
-                    tracking-[-0.04em]
-                    text-white
-                  "
-                >
+                <h1 className="text-7xl font-black mb-7">
                   Memory
                   <br />
                   Unlocked
                 </h1>
 
-                <p className="mt-6 text-white/50 text-base">
-                  opening hidden video...
+                <p className="text-white/45 text-lg mb-12">
+                  continue to hidden video
                 </p>
+
+                <a
+                  href="/video"
+                  className="
+                    inline-flex
+                    items-center
+                    gap-3
+                    px-10
+                    py-5
+                    rounded-full
+                    bg-white
+                    text-black
+                    font-bold
+                    text-lg
+                    hover:scale-105
+                    transition-all
+                    duration-300
+                    shadow-[0_0_50px_rgba(255,255,255,0.3)]
+                  "
+                >
+                  ▶ Open Video
+                </a>
 
               </motion.div>
             )}
@@ -574,7 +543,6 @@ export default function Chapter2Page() {
         {/* ========================= */}
         {/* SCRATCH CANVAS */}
         {/* ========================= */}
-
         <canvas
           ref={canvasRef}
           className="
@@ -587,6 +555,6 @@ export default function Chapter2Page() {
 
       </motion.div>
 
-    </motion.main>
+    </main>
   );
 }
