@@ -42,7 +42,7 @@ export default function Chapter2Page() {
     let scratchProgress = 0;
 
     // MAKIN BESAR = MAKIN LAMA
-    const MAX_PROGRESS = 6000;
+    const MAX_PROGRESS = 2500;
 
     // =========================
     // DRAW SCRATCH LAYER
