@@ -78,7 +78,7 @@ export default function Chapter2Page() {
         ctx.stroke();
       }
 
-      // GLOW
+      // CENTER GLOW
       const glow = ctx.createRadialGradient(
         width / 2,
         height / 2,
@@ -397,7 +397,7 @@ export default function Chapter2Page() {
 
         {/* CONTENT */}
 
-        <div className="absolute inset-0 z-10 flex flex-col items-center pt-[70px] text-white">
+        <div className="absolute inset-0 z-20 flex flex-col items-center pt-[70px] text-white">
 
           <AnimatePresence mode="wait">
 
@@ -517,13 +517,10 @@ export default function Chapter2Page() {
 
                   </div>
 
-                  {/* BAR WRAPPER */}
+                  {/* BAR */}
                   <div className="relative h-[8px] rounded-full overflow-hidden bg-white/10">
 
-                    {/* GLOW */}
-                    <div className="absolute inset-0 bg-white/[0.03]" />
-
-                    {/* ACTIVE BAR */}
+                    {/* ACTIVE */}
                     <motion.div
                       animate={{
                         width: `${progress}%`,
@@ -550,7 +547,7 @@ export default function Chapter2Page() {
 
                   </div>
 
-                  {/* BOTTOM TEXT */}
+                  {/* STATUS */}
                   <div className="mt-4 text-center">
 
                     {progress < 30 && (
@@ -631,7 +628,7 @@ export default function Chapter2Page() {
           className="
             absolute
             inset-0
-            z-20
+            z-10
             cursor-crosshair
           "
         />
