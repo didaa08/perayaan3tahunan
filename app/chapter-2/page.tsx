@@ -45,13 +45,13 @@ export default function Chapter2Page() {
     const MAX_PROGRESS = 6000;
 
     // =========================
-    // DRAW SILVER LAYER
+    // DRAW SCRATCH LAYER
     // =========================
 
     const drawLayer = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // BASE GRADIENT
+      // BASE SILVER
 
       const gradient =
         ctx.createLinearGradient(
@@ -63,27 +63,27 @@ export default function Chapter2Page() {
 
       gradient.addColorStop(
         0,
-        "#d4d4d8"
+        "#cfcfd4"
       );
 
       gradient.addColorStop(
         0.25,
-        "#ffffff"
+        "#f5f5f5"
       );
 
       gradient.addColorStop(
         0.5,
-        "#e4e4e7"
+        "#dcdce1"
       );
 
       gradient.addColorStop(
         0.75,
-        "#fafafa"
+        "#ffffff"
       );
 
       gradient.addColorStop(
         1,
-        "#d4d4d8"
+        "#cfcfd4"
       );
 
       ctx.fillStyle = gradient;
@@ -95,7 +95,7 @@ export default function Chapter2Page() {
         height
       );
 
-      // SHINY LINES
+      // SHINY STRIPES
 
       for (
         let i = -300;
@@ -112,23 +112,27 @@ export default function Chapter2Page() {
         );
 
         ctx.strokeStyle =
-          "rgba(255,255,255,0.10)";
+          "#ffffff";
 
-        ctx.lineWidth = 40;
+        ctx.lineWidth = 22;
 
         ctx.stroke();
       }
 
-      // TEXTURE
+      // HARD TEXTURE
+      // TANPA OPACITY
 
       for (
         let i = 0;
-        i < 12000;
+        i < 8000;
         i++
       ) {
-        ctx.fillStyle = `rgba(255,255,255,${
-          Math.random() * 0.05
-        })`;
+        const shade =
+          Math.random() > 0.5
+            ? "#e5e5e5"
+            : "#d1d1d1";
+
+        ctx.fillStyle = shade;
 
         ctx.fillRect(
           Math.random() * width,
@@ -160,7 +164,7 @@ export default function Chapter2Page() {
       ctx.arc(
         x,
         y,
-        40,
+        42,
         0,
         Math.PI * 2
       );
