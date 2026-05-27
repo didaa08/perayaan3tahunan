@@ -29,8 +29,9 @@ export default function Chapter2Page() {
     let alreadyRevealed = false;
 
     // =========================
-    // DRAW DREAMY SCRATCH LAYER
+    // DRAW SCRATCH LAYER
     // =========================
+
     const drawLayer = () => {
       ctx.clearRect(0, 0, width, height);
 
@@ -107,7 +108,7 @@ export default function Chapter2Page() {
       ctx.textAlign = "center";
 
       ctx.fillStyle = "rgba(255,255,255,0.92)";
-      ctx.font = "italic 72px serif";
+      ctx.font = "italic 62px serif";
 
       ctx.fillText(
         "Hidden Memories",
@@ -117,7 +118,7 @@ export default function Chapter2Page() {
 
       // SUBTEXT
       ctx.fillStyle = "rgba(255,255,255,0.55)";
-      ctx.font = "20px sans-serif";
+      ctx.font = "18px sans-serif";
 
       ctx.fillText(
         "scratch slowly to reveal",
@@ -126,13 +127,13 @@ export default function Chapter2Page() {
       );
 
       // SMALL TEXT
-      ctx.fillStyle = "rgba(255,255,255,0.25)";
-      ctx.font = "14px sans-serif";
+      ctx.fillStyle = "rgba(255,255,255,0.22)";
+      ctx.font = "13px sans-serif";
 
       ctx.fillText(
         "hold click and move gently",
         width / 2,
-        410
+        405
       );
     };
 
@@ -141,6 +142,7 @@ export default function Chapter2Page() {
     // =========================
     // SCRATCH EFFECT
     // =========================
+
     const scratch = (x: number, y: number) => {
       ctx.globalCompositeOperation =
         "destination-out";
@@ -172,6 +174,7 @@ export default function Chapter2Page() {
     // =========================
     // GET POSITION
     // =========================
+
     const getPosition = (
       e: MouseEvent | TouchEvent
     ) => {
@@ -199,6 +202,7 @@ export default function Chapter2Page() {
     // =========================
     // CALCULATE REVEAL
     // =========================
+
     const calculateReveal = () => {
       const imageData = ctx.getImageData(
         0,
@@ -255,6 +259,7 @@ export default function Chapter2Page() {
     // =========================
     // EVENTS
     // =========================
+
     const start = () => {
       isDrawing = true;
     };
@@ -422,17 +427,19 @@ export default function Chapter2Page() {
                 className="text-center"
               >
 
-                <p className="uppercase tracking-[0.5em] text-white/40 text-xs mb-5">
+                {/* CHAPTER */}
+                <p className="uppercase tracking-[0.45em] text-white/35 text-[11px] mb-6">
                   Chapter 02
                 </p>
 
+                {/* TITLE */}
                 <h1
                   className="
-                    text-[88px]
+                    text-[72px]
                     italic
-                    leading-none
+                    leading-[0.95]
                     font-light
-                    tracking-tight
+                    tracking-[-0.04em]
                     text-white
                   "
                 >
@@ -441,48 +448,62 @@ export default function Chapter2Page() {
                   Memories
                 </h1>
 
-                <p className="mt-6 text-white/60 text-lg leading-relaxed">
+                {/* SUBTEXT */}
+                <p className="mt-6 text-white/50 text-base leading-relaxed">
                   some memories were never meant
                   <br />
                   to appear all at once
                 </p>
 
-                {/* BARCODE CARD */}
-
+                {/* MEMORY PHOTO */}
                 <div
                   className="
+                    relative
                     mt-12
-                    px-10
-                    py-7
-                    rounded-[28px]
-                    bg-white/[0.05]
+                    w-[420px]
+                    h-[250px]
+                    rounded-[26px]
+                    overflow-hidden
                     border border-white/10
+                    bg-white/[0.04]
                     backdrop-blur-xl
                   "
                 >
 
-                  <div className="tracking-[0.6em] text-xs text-white/35 mb-5">
-                    MEMORY ACCESS
-                  </div>
-
+                  {/* PHOTO */}
                   <img
-                    src="https://barcode.tec-it.com/barcode.ashx?data=CHAPTER02&type=Code128"
-                    alt="barcode"
+                    src="/images/memory.jpg"
+                    alt="memory"
                     className="
-                      w-[380px]
-                      opacity-90
-                      brightness-125
+                      absolute
+                      inset-0
+                      w-full
+                      h-full
+                      object-cover
+                      grayscale
+                      opacity-80
                     "
                   />
 
-                  <div className="mt-4 text-xs tracking-[0.35em] text-white/25">
-                    CHAPTER_02
+                  {/* OVERLAY */}
+                  <div className="absolute inset-0 bg-black/30" />
+
+                  {/* LABEL */}
+                  <div className="absolute bottom-0 left-0 right-0 p-5">
+
+                    <div className="text-[10px] tracking-[0.4em] text-white/40 mb-2">
+                      PRIVATE MEMORY
+                    </div>
+
+                    <div className="text-white/85 text-lg italic">
+                      June 1st
+                    </div>
+
                   </div>
 
                 </div>
 
                 {/* PROGRESS */}
-
                 <div className="mt-10 w-[260px] mx-auto">
 
                   <div className="h-[2px] bg-white/10 rounded-full overflow-hidden">
@@ -496,7 +517,7 @@ export default function Chapter2Page() {
 
                   </div>
 
-                  <p className="mt-4 text-xs tracking-[0.4em] text-white/30">
+                  <p className="mt-4 text-xs tracking-[0.4em] text-white/25">
                     REVEAL {progress}%
                   </p>
 
@@ -520,17 +541,17 @@ export default function Chapter2Page() {
                 className="text-center"
               >
 
-                <p className="uppercase tracking-[0.5em] text-white/40 text-xs mb-6">
+                <p className="uppercase tracking-[0.5em] text-white/35 text-xs mb-6">
                   Access Granted
                 </p>
 
                 <h1
                   className="
-                    text-[82px]
+                    text-[72px]
                     italic
-                    leading-none
+                    leading-[0.95]
                     font-light
-                    tracking-tight
+                    tracking-[-0.04em]
                     text-white
                   "
                 >
@@ -539,7 +560,7 @@ export default function Chapter2Page() {
                   Unlocked
                 </h1>
 
-                <p className="mt-6 text-white/55 text-lg">
+                <p className="mt-6 text-white/50 text-base">
                   opening hidden video...
                 </p>
 
