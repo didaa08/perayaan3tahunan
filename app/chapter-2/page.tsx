@@ -22,6 +22,10 @@ export default function Chapter2Page() {
 
     if (!ctx) return;
 
+    // =========================
+    // SIZE
+    // =========================
+
     const width = 980;
     const height = 690;
 
@@ -32,23 +36,13 @@ export default function Chapter2Page() {
     let unlocked = false;
 
     // =========================
-    // PROGRESS SYSTEM
-    // =========================
-
-    let scratchAmount = 0;
-
-    // makin gede makin lama
-    const MAX_SCRATCH = 5000;
-
-    let lastX = 0;
-    let lastY = 0;
-
-    // =========================
     // DRAW SILVER LAYER
     // =========================
 
     const drawLayer = () => {
       ctx.clearRect(0, 0, width, height);
+
+      // BASE GRADIENT
 
       const gradient =
         ctx.createLinearGradient(
@@ -109,7 +103,7 @@ export default function Chapter2Page() {
         );
 
         ctx.strokeStyle =
-          "rgba(255,255,255,0.12)";
+          "rgba(255,255,255,0.10)";
 
         ctx.lineWidth = 40;
 
@@ -139,7 +133,7 @@ export default function Chapter2Page() {
     drawLayer();
 
     // =========================
-    // SCRATCH EFFECT
+    // SCRATCH
     // =========================
 
     const scratch = (
@@ -149,15 +143,15 @@ export default function Chapter2Page() {
       ctx.globalCompositeOperation =
         "destination-out";
 
-      for (let i = 0; i < 6; i++) {
+      for (let i = 0; i < 5; i++) {
         const offsetX =
-          (Math.random() - 0.5) * 30;
+          (Math.random() - 0.5) * 24;
 
         const offsetY =
-          (Math.random() - 0.5) * 30;
+          (Math.random() - 0.5) * 24;
 
         const radius =
-          Math.random() * 18 + 24;
+          Math.random() * 16 + 18;
 
         ctx.beginPath();
 
@@ -171,51 +165,68 @@ export default function Chapter2Page() {
 
         ctx.fill();
       }
+    };
 
-      // =========================
-      // DISTANCE BASED PROGRESS
-      // =========================
+    // =========================
+    // REAL AREA PROGRESS
+    // =========================
 
-      const distance = Math.sqrt(
-        Math.pow(x - lastX, 2) +
-          Math.pow(y - lastY, 2)
-      );
-
-      scratchAmount += distance;
-
-      lastX = x;
-      lastY = y;
-
-      const newProgress =
-        Math.min(
-          Math.floor(
-            (scratchAmount /
-              MAX_SCRATCH) *
-              100
-          ),
-          100
+    const calculateProgress = () => {
+      const imageData =
+        ctx.getImageData(
+          0,
+          0,
+          width,
+          height
         );
 
-      setProgress(newProgress);
+      const pixels =
+        imageData.data;
+
+      let transparent = 0;
+
+      // CHECK ALPHA PIXELS
+
+      for (
+        let i = 3;
+        i < pixels.length;
+        i += 4
+      ) {
+        if (pixels[i] < 10) {
+          transparent++;
+        }
+      }
+
+      const totalPixels =
+        width * height;
+
+      const percentage =
+        Math.floor(
+          (transparent /
+            totalPixels) *
+            100
+        );
+
+      setProgress(percentage);
 
       // =========================
       // VIDEO POPUP
       // =========================
 
       if (
-        newProgress >= 70 &&
+        percentage >= 70 &&
         !unlocked
       ) {
         unlocked = true;
 
         setTimeout(() => {
           setShowVideo(true);
-        }, 600);
+        }, 500);
       }
     };
 
     // =========================
-    // GET POSITION
+    // POSITION
     // =========================
 
     const getPosition = (
@@ -246,15 +257,8 @@ export default function Chapter2Page() {
     // EVENTS
     // =========================
 
-    const startDrawing = (
-      e: MouseEvent | TouchEvent
-    ) => {
+    const startDrawing = () => {
       isDrawing = true;
-
-      const pos = getPosition(e);
-
-      lastX = pos.x;
-      lastY = pos.y;
     };
 
     const stopDrawing = () => {
@@ -269,6 +273,8 @@ export default function Chapter2Page() {
       const pos = getPosition(e);
 
       scratch(pos.x, pos.y);
+
+      calculateProgress();
     };
 
     canvas.addEventListener(
@@ -367,7 +373,7 @@ export default function Chapter2Page() {
 
         <div className="absolute right-[-10%] bottom-[0%] w-[700px] h-[700px] rounded-full bg-violet-500/20 blur-[180px]" />
 
-        {/* MAIN CARD */}
+        {/* CARD */}
 
         <motion.div
           initial={{
@@ -492,9 +498,7 @@ export default function Chapter2Page() {
 
             </div>
 
-            {/* ========================= */}
             {/* PROGRESS */}
-            {/* ========================= */}
 
             <div className="mt-12 w-[520px]">
 
@@ -564,7 +568,7 @@ export default function Chapter2Page() {
 
           </div>
 
-          {/* SCRATCH CANVAS */}
+          {/* SCRATCH LAYER */}
 
           <canvas
             ref={canvasRef}
@@ -580,9 +584,7 @@ export default function Chapter2Page() {
 
       </main>
 
-      {/* ========================= */}
       {/* VIDEO POPUP */}
-      {/* ========================= */}
 
       <AnimatePresence>
 
@@ -620,7 +622,7 @@ export default function Chapter2Page() {
               }
             />
 
-            {/* VIDEO CARD */}
+            {/* VIDEO */}
 
             <motion.div
               initial={{
