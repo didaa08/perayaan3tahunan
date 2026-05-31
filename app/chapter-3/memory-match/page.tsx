@@ -12,7 +12,7 @@ const cardsData = [
   {
     id: 2,
     type: "image",
-    content: "/images/beach trip.jpeg",
+    content: "/images/beach-trip.jpeg",
     pair: "a",
   },
 
@@ -38,7 +38,7 @@ const cardsData = [
   {
     id: 6,
     type: "image",
-    content: "/images/safe place.jpeg",
+    content: "/images/safe-place.jpeg",
     pair: "c",
   },
 
@@ -51,7 +51,7 @@ const cardsData = [
   {
     id: 8,
     type: "image",
-    content: "/images/us against distance.jpeg",
+    content: "/images/us-against-distance.jpeg",
     pair: "d",
   },
 ];
