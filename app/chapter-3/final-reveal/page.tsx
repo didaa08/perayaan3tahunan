@@ -3,46 +3,62 @@
 import { useEffect, useRef } from "react";
 
 export default function ScratchCardPage() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasRef =
+    useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
+    const canvas =
+      canvasRef.current;
 
     if (!canvas) return;
 
-    const ctx = canvas.getContext("2d");
+    const ctx =
+      canvas.getContext("2d");
 
     if (!ctx) return;
 
-    canvas.width = 500;
-    canvas.height = 280;
+    const size = 420;
+
+    canvas.width = size;
+    canvas.height = size;
 
     // SILVER BASE
 
     ctx.fillStyle = "#b8b8b8";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillRect(
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
 
     // TEXTURE
 
-    for (let i = 0; i < 9000; i++) {
+    for (let i = 0; i < 12000; i++) {
       ctx.fillStyle =
         Math.random() > 0.5
           ? "#d6d6d6"
           : "#8f8f8f";
 
       ctx.fillRect(
-        Math.random() * canvas.width,
-        Math.random() * canvas.height,
+        Math.random() *
+          canvas.width,
+        Math.random() *
+          canvas.height,
         2,
         2
       );
     }
 
-    // TEXT
+    // SCRATCH TEXT
 
     ctx.fillStyle =
       "rgba(255,255,255,0.45)";
-    ctx.font = "bold 30px sans-serif";
+
+    ctx.font =
+      "bold 28px sans-serif";
+
     ctx.textAlign = "center";
 
     ctx.fillText(
@@ -99,24 +115,34 @@ export default function ScratchCardPage() {
         e.touches[0];
 
       scratch(
-        touch.clientX - rect.left,
-        touch.clientY - rect.top
+        touch.clientX -
+          rect.left,
+        touch.clientY -
+          rect.top
       );
+    };
+
+    const startDrawing = () => {
+      isDrawing = true;
+    };
+
+    const stopDrawing = () => {
+      isDrawing = false;
     };
 
     canvas.addEventListener(
       "mousedown",
-      () => (isDrawing = true)
+      startDrawing
     );
 
     canvas.addEventListener(
       "mouseup",
-      () => (isDrawing = false)
+      stopDrawing
     );
 
     canvas.addEventListener(
       "mouseleave",
-      () => (isDrawing = false)
+      stopDrawing
     );
 
     canvas.addEventListener(
@@ -126,12 +152,12 @@ export default function ScratchCardPage() {
 
     canvas.addEventListener(
       "touchstart",
-      () => (isDrawing = true)
+      startDrawing
     );
 
     canvas.addEventListener(
       "touchend",
-      () => (isDrawing = false)
+      stopDrawing
     );
 
     canvas.addEventListener(
@@ -141,8 +167,33 @@ export default function ScratchCardPage() {
 
     return () => {
       canvas.removeEventListener(
+        "mousedown",
+        startDrawing
+      );
+
+      canvas.removeEventListener(
+        "mouseup",
+        stopDrawing
+      );
+
+      canvas.removeEventListener(
+        "mouseleave",
+        stopDrawing
+      );
+
+      canvas.removeEventListener(
         "mousemove",
         handleMove
+      );
+
+      canvas.removeEventListener(
+        "touchstart",
+        startDrawing
+      );
+
+      canvas.removeEventListener(
+        "touchend",
+        stopDrawing
       );
 
       canvas.removeEventListener(
@@ -174,17 +225,18 @@ export default function ScratchCardPage() {
         </h1>
 
         <p className="text-gray-400 max-w-xl mx-auto leading-relaxed mb-12">
-          Scratch the silver card slowly ✨
+          Scratch the card slowly ✨
         </p>
 
-        {/* SCRATCH CARD */}
+        {/* CARD */}
 
         <div
           className="
             relative
-            w-[90vw]
-            max-w-[500px]
-            h-[280px]
+            w-[320px]
+            md:w-[420px]
+            aspect-square
+            mx-auto
             rounded-[32px]
             overflow-hidden
             border
@@ -193,34 +245,61 @@ export default function ScratchCardPage() {
             shadow-[0_0_40px_rgba(255,255,255,0.05)]
           "
         >
-          {/* FOTO */}
+          {/* BLURRED BACKGROUND */}
 
           <img
-            src="/images/barcode-gofut.png"
-            alt="Final Reveal"
+            src="/images/us-final.jpg"
+            alt=""
             className="
               absolute
               inset-0
               w-full
               h-full
               object-cover
+              blur-xl
+              scale-125
+              opacity-40
             "
           />
 
-          {/* OVERLAY */}
+          {/* MAIN PHOTO */}
+
+          <img
+            src="/images/us-final.jpg"
+            alt="Final Reveal"
+            className="
+              absolute
+              inset-0
+              w-full
+              h-full
+              object-contain
+              z-10
+            "
+          />
+
+          {/* CAPTION */}
 
           <div
             className="
               absolute
-              inset-0
-              bg-black/30
-              flex
-              items-end
-              justify-center
+              inset-x-0
+              bottom-0
+              z-20
+              bg-gradient-to-t
+              from-black/80
+              to-transparent
+              pt-20
               pb-6
             "
           >
-            <p className="text-xl md:text-2xl font-serif italic">
+            <p
+              className="
+                text-xl
+                md:text-2xl
+                font-serif
+                italic
+              "
+            >
               To Be Continued ❤️
             </p>
           </div>
@@ -232,35 +311,34 @@ export default function ScratchCardPage() {
             className="
               absolute
               inset-0
+              z-30
               cursor-pointer
-              z-20
             "
           />
         </div>
 
-        {/* BUTTON SELALU MUNCUL */}
+        {/* BUTTON */}
 
-        <div className="mt-8">
-          <a
-            href="https://perayaan3tahunan.vercel.app/chapters"
-            className="
-              inline-flex
-              items-center
-              px-8
-              py-3
-              rounded-full
-              bg-pink-500
-              text-white
-              font-medium
-              hover:bg-pink-400
-              transition-all
-              duration-300
-              shadow-lg
-            "
-          >
-            ← Back to Chapters
-          </a>
-        </div>
+        <a
+          href="https://perayaan3tahunan.vercel.app/chapters"
+          className="
+            inline-flex
+            items-center
+            mt-8
+            px-8
+            py-3
+            rounded-full
+            border
+            border-pink-400/30
+            bg-pink-500/10
+            text-pink-200
+            hover:bg-pink-500/20
+            transition-all
+            duration-300
+          "
+        >
+          ← Back to Chapters
+        </a>
       </div>
     </main>
   );
