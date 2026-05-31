@@ -19,13 +19,13 @@ const cardsData = [
   {
     id: 3,
     type: "text",
-    content: "LATE NIGHT TALKS",
+    content: "LATE NIGHT CONCERT",
     pair: "b",
   },
   {
     id: 4,
     type: "image",
-    content: "/images/match2.jpeg",
+    content: "/images/hujan.jpeg",
     pair: "b",
   },
 
@@ -38,7 +38,7 @@ const cardsData = [
   {
     id: 6,
     type: "image",
-    content: "/images/match3.png",
+    content: "/images/safe place.jpeg",
     pair: "c",
   },
 
@@ -51,7 +51,7 @@ const cardsData = [
   {
     id: 8,
     type: "image",
-    content: "/images/match4.jpeg",
+    content: "/images/us against distance.jpeg",
     pair: "d",
   },
 ];
