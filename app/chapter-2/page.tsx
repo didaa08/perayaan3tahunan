@@ -532,7 +532,7 @@ export default function Chapter2Page() {
         font-semibold
       "
     >
-      ❤️ Buka Kenangan
+      Selamat Merayakan Tigatahunan ❤️
     </button>
   </div>
 )}
