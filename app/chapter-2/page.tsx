@@ -344,15 +344,15 @@ export default function Chapter2Page() {
     <>
       <main
         className="
-          relative
-          min-h-screen
-          overflow-hidden
-          bg-[#07070a]
-          flex
-          items-center
-          justify-center
-          p-6
-        "
+           relative
+            w-full
+            max-w-6xl
+            aspect-video
+            rounded-[32px]
+            overflow-hidden
+            bg-black
+            border border-white/10
+          "
       >
 
         {/* BACKGROUND */}
@@ -366,29 +366,14 @@ export default function Chapter2Page() {
         {/* CARD */}
 
         <motion.div
-          initial={{
-            opacity: 0,
-            y: 20,
-            scale: 0.97,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-            scale: 1,
-          }}
-          transition={{
-            duration: 1,
-          }}
-          className="
-            relative
-            w-[980px]
-            h-[690px]
-            rounded-[42px]
-            overflow-hidden
-            border border-white/10
-            bg-white/[0.03]
-            backdrop-blur-2xl
-          "
+           className="
+              relative
+              max-h-[90vh]
+              w-auto
+              rounded-[32px]
+              overflow-hidden
+              bg-black
+            "
         >
 
           {/* CONTENT */}
@@ -567,12 +552,14 @@ export default function Chapter2Page() {
               <video
                 autoPlay
                 controls
+                playsInline
                 className="
-                  w-full
-                  h-full
-                  object-cover
+                  max-h-[90vh]
+                 w-auto
+                  block
                 "
               >
+
                 <source
                   src="/videos/tigatahunan.mp4"
                   type="video/mp4"
