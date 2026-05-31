@@ -565,7 +565,6 @@ export default function Chapter2Page() {
 
               <video
                 autoPlay
-                muted
                 controls
                 playsInline
                 preload="auto"
