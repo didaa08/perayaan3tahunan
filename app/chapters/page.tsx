@@ -24,7 +24,7 @@ export default function ChaptersPage() {
             href="/chapter-1"
             title="Chapter 1"
             subtitle="Recall Memories"
-            image="/images/Chapter1.JPG"
+            image="/images/Chapter1.jpg"
             position="center 20%"
             unlocked={true}
           />
