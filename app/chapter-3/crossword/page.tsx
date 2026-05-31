@@ -443,3 +443,7 @@ export default function CrosswordPage() {
     </a>
   </div>
 )}
+      </div>
+    </main>
+  );
+}
