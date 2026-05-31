@@ -344,15 +344,15 @@ export default function Chapter2Page() {
     <>
       <main
         className="
-           relative
-            w-full
-            max-w-6xl
-            aspect-video
-            rounded-[32px]
-            overflow-hidden
-            bg-black
-            border border-white/10
-          "
+         relative
+          min-h-screen
+          overflow-hidden
+          bg-[#07070a]
+          flex
+          items-center
+          justify-center
+          p-6
+        "
       >
 
         {/* BACKGROUND */}
@@ -366,14 +366,29 @@ export default function Chapter2Page() {
         {/* CARD */}
 
         <motion.div
-           className="
-              relative
-              max-h-[90vh]
-              w-auto
-              rounded-[32px]
-              overflow-hidden
-              bg-black
-            "
+          initial={{
+            opacity: 0,
+            y: 20,
+            scale: 0.97,
+          }}
+          animate={{
+              opacity: 1,
+              y: 0,
+              scale: 1,
+          }}
+          transition={{
+              duration: 1,
+          }}
+          className="
+             relative
+             w-[980px]
+             h-[690px]
+             rounded-[42px]
+             overflow-hidden
+             border border-white/10
+             bg-white/[0.03]
+             backdrop-blur-2xl
+          "
         >
 
           {/* CONTENT */}
@@ -541,22 +556,23 @@ export default function Chapter2Page() {
               }}
               className="
                 relative
-                w-full
-                max-w-5xl
                 rounded-[32px]
                 overflow-hidden
                 bg-black
+                border border-white/10
               "
             >
 
               <video
                 autoPlay
+                muted
                 controls
                 playsInline
+                preload="auto"
                 className="
-                  max-h-[90vh]
-                 w-auto
                   block
+                  max-h-[90vh]
+                  w-auto
                 "
               >
 
