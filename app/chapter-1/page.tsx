@@ -16,8 +16,6 @@ const slides = [
   "I made this."
 ];
 
-const YOUTUBE_VIDEO_ID = "rcratpzhphs";
-
 export default function Chapter1Page() {
   const [step, setStep] = useState(0);
   const [showVideo, setShowVideo] = useState(false);
@@ -103,36 +101,59 @@ export default function Chapter1Page() {
             items-center
             justify-center
             bg-black
-            px-4
+            px-6
+            text-center
           "
         >
-          <iframe
-            src={`https://www.youtube.com/embed/${rcratpzhphs}?autoplay=1&rel=0`}
-            title="Speech Video"
-            allow="autoplay; encrypted-media; fullscreen"
-            allowFullScreen
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+            className="mb-4 text-3xl font-light md:text-5xl"
+          >
+            I have something to tell you.
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="mb-10 max-w-xl text-white/60"
+          >
+            Please watch this before continuing.
+          </motion.p>
+
+          <a
+            href="https://youtu.be/rcratpzhphs"
+            target="_blank"
+            rel="noopener noreferrer"
             className="
-              h-[70vh]
-              w-full
-              max-w-6xl
-              rounded-2xl
+              mb-8
+              border
+              border-white
+              px-10
+              py-4
+              text-sm
+              uppercase
+              tracking-[0.3em]
+              transition
+              hover:bg-white
+              hover:text-black
             "
-          />
+          >
+            ▶ Watch My Message
+          </a>
 
           <a
             href="https://perayaan3tahunan.vercel.app/chapters"
             className="
-              mt-8
-              rounded-full
               border
               border-white/20
-              bg-white/10
               px-8
-              py-4
+              py-3
               text-sm
               uppercase
               tracking-[0.2em]
-              backdrop-blur-md
               transition
               hover:bg-white
               hover:text-black
