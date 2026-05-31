@@ -15,6 +15,9 @@ export default function Chapter2Page() {
   const [unlocked, setUnlocked] =
   useState(false);
 
+  const [videoEnded, setVideoEnded] =
+  useState(false);
+
   useEffect(() => {
     const canvas = canvasRef.current;
 
@@ -597,6 +600,9 @@ export default function Chapter2Page() {
                 controls
                 playsInline
                 preload="auto"
+                onEnded={() =>
+                  setVideoEnded(true)
+                }
                 className="
                   block
                   max-h-[90vh]
@@ -609,6 +615,33 @@ export default function Chapter2Page() {
                   type="video/mp4"
                 />
               </video>
+              {videoEnded && (
+                <div
+                  className="
+                    absolute
+                    inset-0
+                    bg-black/80
+                    flex
+                    items-center
+                    justify-center
+                  "
+                >
+                  <a
+                    href="/chapters"
+                    className="
+                      px-8
+                      py-4
+                      rounded-full
+                      bg-white
+                      text-black
+                      font-semibold
+                      text-lg
+                    "
+                  >
+                    ✨ Continue to Chapters
+                   </a>
+                </div>
+              )}
 
               <button
                 onClick={() =>
