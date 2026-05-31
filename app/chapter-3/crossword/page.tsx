@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-const CELL = 24;
+const CELL = 30;
 
 const cells = [
 
