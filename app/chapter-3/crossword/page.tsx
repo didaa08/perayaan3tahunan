@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-const CELL = 38;
+const CELL = 30;
 
 const cells = [
 
@@ -215,7 +215,7 @@ export default function CrosswordPage() {
               const isWrong =
                 currentValue &&
                 currentValue !==
-                  cell.letter;
+                cell.letter;
 
               return (
 
@@ -279,14 +279,13 @@ export default function CrosswordPage() {
                       transition-all
                       duration-200
 
-                      ${
-                        isCorrect
-                          ? `
+                      ${isCorrect
+                        ? `
                             bg-pink-500/20
                             border-pink-400
                             text-white
                           `
-                          : isWrong
+                        : isWrong
                           ? `
                             bg-red-500/10
                             border-red-400
@@ -309,7 +308,7 @@ export default function CrosswordPage() {
 
           {/* CLUES */}
 
-          <div className="w-full max-w-md space-y-10">
+          <div className="w-full max-w-md space-y-10 lg:pl-8">
 
             <div>
 
@@ -397,15 +396,15 @@ export default function CrosswordPage() {
 
           <div
             className="
-              mt-24
-              text-center
-              bg-pink-500/10
-              border
-              border-pink-400/20
-              rounded-[40px]
-              p-14
-              animate-pulse
-            "
+      mt-24
+      text-center
+      bg-pink-500/10
+      border
+      border-pink-400/20
+      rounded-[40px]
+      p-14
+      animate-pulse
+    "
           >
 
             <div className="text-6xl mb-6">
@@ -423,40 +422,34 @@ export default function CrosswordPage() {
               somehow you still remember all of it.
             </p>
 
+            <a
+              href="/chapter-3/final-reveal"
+              className="
+        inline-flex
+        items-center
+        justify-center
+
+        mt-10
+
+        px-8
+        py-4
+
+        rounded-full
+
+        bg-white
+        text-black
+
+        text-sm
+        font-semibold
+
+        hover:scale-105
+        transition-all
+        duration-300
+      "
+            >
+              Open Final Surprise ✨
+            </a>
+
           </div>
 
         )}
-
-<a
-  href="/final-reveal"
-  className="
-    inline-flex
-    items-center
-    justify-center
-
-    mt-10
-
-    px-8
-    py-4
-
-    rounded-full
-
-    bg-white
-    text-black
-
-    text-sm
-    font-semibold
-
-    hover:scale-105
-    transition-all
-    duration-300
-  "
->
-  Open Final Surprise ✨
-</a>
-
-      </div>
-
-    </main>
-  );
-}
