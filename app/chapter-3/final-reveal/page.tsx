@@ -1,30 +1,16 @@
 "use client";
 
-import {
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-
-import { useRouter } from "next/navigation";
+import { useEffect, useRef } from "react";
 
 export default function ScratchCardPage() {
-  const canvasRef =
-    useRef<HTMLCanvasElement>(null);
-
-  const [completed, setCompleted] =
-    useState(false);
-
-  const router = useRouter();
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const canvas =
-      canvasRef.current;
+    const canvas = canvasRef.current;
 
     if (!canvas) return;
 
-    const ctx =
-      canvas.getContext("2d");
+    const ctx = canvas.getContext("2d");
 
     if (!ctx) return;
 
@@ -34,13 +20,7 @@ export default function ScratchCardPage() {
     // SILVER BASE
 
     ctx.fillStyle = "#b8b8b8";
-
-    ctx.fillRect(
-      0,
-      0,
-      canvas.width,
-      canvas.height
-    );
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // TEXTURE
 
@@ -51,10 +31,8 @@ export default function ScratchCardPage() {
           : "#8f8f8f";
 
       ctx.fillRect(
-        Math.random() *
-          canvas.width,
-        Math.random() *
-          canvas.height,
+        Math.random() * canvas.width,
+        Math.random() * canvas.height,
         2,
         2
       );
@@ -64,10 +42,7 @@ export default function ScratchCardPage() {
 
     ctx.fillStyle =
       "rgba(255,255,255,0.45)";
-
-    ctx.font =
-      "bold 30px sans-serif";
-
+    ctx.font = "bold 30px sans-serif";
     ctx.textAlign = "center";
 
     ctx.fillText(
@@ -77,40 +52,6 @@ export default function ScratchCardPage() {
     );
 
     let isDrawing = false;
-
-    const checkProgress = () => {
-      const imageData =
-        ctx.getImageData(
-          0,
-          0,
-          canvas.width,
-          canvas.height
-        );
-
-      let cleared = 0;
-
-      for (
-        let i = 3;
-        i < imageData.data.length;
-        i += 4
-      ) {
-        if (
-          imageData.data[i] === 0
-        ) {
-          cleared++;
-        }
-      }
-
-      const percent =
-        (cleared /
-          (canvas.width *
-            canvas.height)) *
-        100;
-
-      if (percent > 70) {
-        setCompleted(true);
-      }
-    };
 
     const scratch = (
       x: number,
@@ -130,11 +71,7 @@ export default function ScratchCardPage() {
       );
 
       ctx.fill();
-
-      checkProgress();
     };
-
-    // DESKTOP
 
     const handleMove = (
       e: MouseEvent
@@ -150,8 +87,6 @@ export default function ScratchCardPage() {
       );
     };
 
-    // MOBILE
-
     const handleTouchMove = (
       e: TouchEvent
     ) => {
@@ -164,10 +99,8 @@ export default function ScratchCardPage() {
         e.touches[0];
 
       scratch(
-        touch.clientX -
-          rect.left,
-        touch.clientY -
-          rect.top
+        touch.clientX - rect.left,
+        touch.clientY - rect.top
       );
     };
 
@@ -205,10 +138,22 @@ export default function ScratchCardPage() {
       "touchmove",
       handleTouchMove
     );
+
+    return () => {
+      canvas.removeEventListener(
+        "mousemove",
+        handleMove
+      );
+
+      canvas.removeEventListener(
+        "touchmove",
+        handleTouchMove
+      );
+    };
   }, []);
 
   return (
-    <main className="min-h-screen bg-black text-white flex items-center justify-center px-6 relative overflow-hidden">
+    <main className="min-h-screen bg-black text-white flex items-center justify-center px-6 py-20 relative">
       {/* BACKGROUND */}
 
       <div className="absolute inset-0 bg-gradient-to-b from-black via-zinc-950 to-black" />
@@ -221,23 +166,24 @@ export default function ScratchCardPage() {
 
       <div className="relative z-10 text-center">
         <p className="tracking-[0.4em] uppercase text-sm text-pink-200/60 mb-5">
-          Chapter 3
+          CHAPTER 3
         </p>
 
         <h1 className="text-5xl md:text-7xl font-serif italic mb-8">
           Final Reveal
         </h1>
 
-        <p className="text-gray-400 max-w-xl mx-auto leading-relaxed mb-14">
+        <p className="text-gray-400 max-w-xl mx-auto leading-relaxed mb-12">
           Scratch the silver card slowly ✨
         </p>
 
-        {/* CARD */}
+        {/* SCRATCH CARD */}
 
         <div
           className="
             relative
-            w-[500px]
+            w-[90vw]
+            max-w-[500px]
             h-[280px]
             rounded-[32px]
             overflow-hidden
@@ -247,32 +193,39 @@ export default function ScratchCardPage() {
             shadow-[0_0_40px_rgba(255,255,255,0.05)]
           "
         >
-          {/* SURPRISE */}
+          {/* FOTO */}
+
+          <img
+            src="/images/us-final.jpg"
+            alt="Final Reveal"
+            className="
+              absolute
+              inset-0
+              w-full
+              h-full
+              object-cover
+            "
+          />
+
+          {/* OVERLAY */}
 
           <div
             className="
               absolute
               inset-0
+              bg-black/30
               flex
-              flex-col
-              items-center
+              items-end
               justify-center
-              px-8
+              pb-6
             "
           >
-            <h2 className="text-3xl font-serif italic mb-3">
-              We Made It ❤️
-            </h2>
-
-            <p className="text-white/50 max-w-sm">
-              Through every challenge,
-              every late night, every
-              uncertainty...
-              we are still here.
+            <p className="text-xl md:text-2xl font-serif italic">
+              To Be Continued ❤️
             </p>
           </div>
 
-          {/* SCRATCH */}
+          {/* SCRATCH LAYER */}
 
           <canvas
             ref={canvasRef}
@@ -280,34 +233,34 @@ export default function ScratchCardPage() {
               absolute
               inset-0
               cursor-pointer
+              z-20
             "
           />
         </div>
 
-        {/* BUTTON */}
+        {/* BUTTON SELALU MUNCUL */}
 
-        {completed && (
-          <button
-            onClick={() =>
-              router.push("/chapters")
-            }
+        <div className="mt-8">
+          <a
+            href="https://perayaan3tahunan.vercel.app/chapters"
             className="
-              mt-10
+              inline-flex
+              items-center
               px-8
               py-3
               rounded-full
               bg-pink-500
-              hover:bg-pink-400
               text-white
+              font-medium
+              hover:bg-pink-400
               transition-all
               duration-300
-              hover:scale-105
               shadow-lg
             "
           >
-            Continue Our Journey →
-          </button>
-        )}
+            ← Back to Chapters
+          </a>
+        </div>
       </div>
     </main>
   );
