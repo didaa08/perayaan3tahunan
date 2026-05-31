@@ -1,14 +1,23 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+
+import { useRouter } from "next/navigation";
 
 export default function ScratchCardPage() {
-
   const canvasRef =
     useRef<HTMLCanvasElement>(null);
 
-  useEffect(() => {
+  const [completed, setCompleted] =
+    useState(false);
 
+  const router = useRouter();
+
+  useEffect(() => {
     const canvas =
       canvasRef.current;
 
@@ -22,7 +31,7 @@ export default function ScratchCardPage() {
     canvas.width = 500;
     canvas.height = 280;
 
-    // BASE SILVER
+    // SILVER BASE
 
     ctx.fillStyle = "#b8b8b8";
 
@@ -36,7 +45,6 @@ export default function ScratchCardPage() {
     // TEXTURE
 
     for (let i = 0; i < 9000; i++) {
-
       ctx.fillStyle =
         Math.random() > 0.5
           ? "#d6d6d6"
@@ -45,10 +53,8 @@ export default function ScratchCardPage() {
       ctx.fillRect(
         Math.random() *
           canvas.width,
-
         Math.random() *
           canvas.height,
-
         2,
         2
       );
@@ -72,11 +78,44 @@ export default function ScratchCardPage() {
 
     let isDrawing = false;
 
+    const checkProgress = () => {
+      const imageData =
+        ctx.getImageData(
+          0,
+          0,
+          canvas.width,
+          canvas.height
+        );
+
+      let cleared = 0;
+
+      for (
+        let i = 3;
+        i < imageData.data.length;
+        i += 4
+      ) {
+        if (
+          imageData.data[i] === 0
+        ) {
+          cleared++;
+        }
+      }
+
+      const percent =
+        (cleared /
+          (canvas.width *
+            canvas.height)) *
+        100;
+
+      if (percent > 70) {
+        setCompleted(true);
+      }
+    };
+
     const scratch = (
       x: number,
       y: number
     ) => {
-
       ctx.globalCompositeOperation =
         "destination-out";
 
@@ -91,6 +130,8 @@ export default function ScratchCardPage() {
       );
 
       ctx.fill();
+
+      checkProgress();
     };
 
     // DESKTOP
@@ -98,7 +139,6 @@ export default function ScratchCardPage() {
     const handleMove = (
       e: MouseEvent
     ) => {
-
       if (!isDrawing) return;
 
       const rect =
@@ -115,7 +155,6 @@ export default function ScratchCardPage() {
     const handleTouchMove = (
       e: TouchEvent
     ) => {
-
       if (!isDrawing) return;
 
       const rect =
@@ -127,13 +166,10 @@ export default function ScratchCardPage() {
       scratch(
         touch.clientX -
           rect.left,
-
         touch.clientY -
           rect.top
       );
     };
-
-    // EVENTS
 
     canvas.addEventListener(
       "mousedown",
@@ -155,8 +191,6 @@ export default function ScratchCardPage() {
       handleMove
     );
 
-    // MOBILE
-
     canvas.addEventListener(
       "touchstart",
       () => (isDrawing = true)
@@ -171,13 +205,10 @@ export default function ScratchCardPage() {
       "touchmove",
       handleTouchMove
     );
-
   }, []);
 
   return (
-
     <main className="min-h-screen bg-black text-white flex items-center justify-center px-6 relative overflow-hidden">
-
       {/* BACKGROUND */}
 
       <div className="absolute inset-0 bg-gradient-to-b from-black via-zinc-950 to-black" />
@@ -189,17 +220,16 @@ export default function ScratchCardPage() {
       {/* CONTENT */}
 
       <div className="relative z-10 text-center">
-
         <p className="tracking-[0.4em] uppercase text-sm text-pink-200/60 mb-5">
-          Final Reveal
+          Chapter 3
         </p>
 
         <h1 className="text-5xl md:text-7xl font-serif italic mb-8">
-          Scratch Card
+          Final Reveal
         </h1>
 
         <p className="text-gray-400 max-w-xl mx-auto leading-relaxed mb-14">
-          scratch the silver area slowly ✨
+          Scratch the silver card slowly ✨
         </p>
 
         {/* CARD */}
@@ -217,26 +247,32 @@ export default function ScratchCardPage() {
             shadow-[0_0_40px_rgba(255,255,255,0.05)]
           "
         >
-
-          {/* UNDER LAYER */}
+          {/* SURPRISE */}
 
           <div
             className="
               absolute
               inset-0
               flex
+              flex-col
               items-center
               justify-center
-              text-3xl
-              font-serif
-              italic
-              text-white/20
+              px-8
             "
           >
-            hidden surprise ✨
+            <h2 className="text-3xl font-serif italic mb-3">
+              We Made It ❤️
+            </h2>
+
+            <p className="text-white/50 max-w-sm">
+              Through every challenge,
+              every late night, every
+              uncertainty...
+              we are still here.
+            </p>
           </div>
 
-          {/* SCRATCH CANVAS */}
+          {/* SCRATCH */}
 
           <canvas
             ref={canvasRef}
@@ -246,11 +282,33 @@ export default function ScratchCardPage() {
               cursor-pointer
             "
           />
-
         </div>
 
-      </div>
+        {/* BUTTON */}
 
+        {completed && (
+          <button
+            onClick={() =>
+              router.push("/chapters")
+            }
+            className="
+              mt-10
+              px-8
+              py-3
+              rounded-full
+              bg-pink-500
+              hover:bg-pink-400
+              text-white
+              transition-all
+              duration-300
+              hover:scale-105
+              shadow-lg
+            "
+          >
+            Continue Our Journey →
+          </button>
+        )}
+      </div>
     </main>
   );
 }
