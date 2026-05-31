@@ -574,7 +574,7 @@ export default function Chapter2Page() {
                 "
               >
                 <source
-                  src="/videos/chapter2.mp4"
+                  src="/videos/Tigatahunan.mp4"
                   type="video/mp4"
                 />
               </video>
