@@ -10,7 +10,7 @@ import {
   DragEndEvent,
 } from "@dnd-kit/core";
 
-const IMAGE = "/images/Chapter2.jpg";
+const IMAGE = "/images/Chapter3.jpeg";
 
 const COLS = 4;
 const ROWS = 6;
