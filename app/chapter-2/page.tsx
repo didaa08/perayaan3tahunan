@@ -12,6 +12,9 @@ export default function Chapter2Page() {
   const [showVideo, setShowVideo] =
     useState(false);
 
+  const [unlocked, setUnlocked] =
+  useState(false);
+
   useEffect(() => {
     const canvas = canvasRef.current;
 
@@ -203,10 +206,7 @@ export default function Chapter2Page() {
         !unlocked
       ) {
         unlocked = true;
-
-        setTimeout(() => {
-          setShowVideo(true);
-        }, 500);
+        setUnlocked(true);
       }
     };
 
@@ -506,7 +506,36 @@ export default function Chapter2Page() {
         </motion.div>
 
       </main>
-
+{unlocked && !showVideo && (
+  <div
+    className="
+      fixed
+      inset-0
+      z-[999]
+      bg-black/80
+      flex
+      items-center
+      justify-center
+    "
+  >
+    <button
+      onClick={() =>
+        setShowVideo(true)
+      }
+      className="
+        px-8
+        py-4
+        rounded-full
+        bg-white
+        text-black
+        text-xl
+        font-semibold
+      "
+    >
+      ❤️ Buka Kenangan
+    </button>
+  </div>
+)}
       {/* VIDEO POPUP */}
 
       <AnimatePresence>
