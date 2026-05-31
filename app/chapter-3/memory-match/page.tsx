@@ -6,13 +6,13 @@ const cardsData = [
   {
     id: 1,
     type: "text",
-    content: "FIRST CALL",
+    content: "FIRST BEACH TRIP",
     pair: "a",
   },
   {
     id: 2,
     type: "image",
-    content: "/images/match1.JPG",
+    content: "/images/beach trip.jpeg",
     pair: "a",
   },
 
