@@ -16,13 +16,15 @@ const slides = [
   "I made this."
 ];
 
+const YOUTUBE_VIDEO_ID = "rcratpzhphs";
+
 export default function Chapter1Page() {
   const [step, setStep] = useState(0);
   const [showVideo, setShowVideo] = useState(false);
 
   const next = () => {
     if (step < slides.length - 1) {
-      setStep(step + 1);
+      setStep((prev) => prev + 1);
     }
   };
 
@@ -40,7 +42,7 @@ export default function Chapter1Page() {
               transition={{ duration: 1.2 }}
               className="mx-auto max-w-4xl px-8 text-center"
             >
-              <h1 className="text-3xl font-light md:text-6xl">
+              <h1 className="text-3xl font-light leading-relaxed md:text-6xl">
                 {slides[step]}
               </h1>
             </motion.div>
@@ -56,8 +58,8 @@ export default function Chapter1Page() {
                   px-8
                   py-3
                   text-sm
-                  tracking-[0.3em]
                   uppercase
+                  tracking-[0.3em]
                   transition
                   hover:bg-white
                   hover:text-black
@@ -74,8 +76,8 @@ export default function Chapter1Page() {
                   px-10
                   py-4
                   text-sm
-                  tracking-[0.3em]
                   uppercase
+                  tracking-[0.3em]
                   transition
                   hover:bg-white
                   hover:text-black
@@ -92,37 +94,51 @@ export default function Chapter1Page() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="absolute inset-0 flex items-center justify-center bg-black"
+          className="
+            absolute
+            inset-0
+            z-50
+            flex
+            flex-col
+            items-center
+            justify-center
+            bg-black
+            px-4
+          "
         >
-          <video
-            autoPlay
-            controls
-            playsInline
-            preload="auto"
-            className="max-h-screen w-auto"
-          >
-            <source
-              src="/videos/chapter1.mp4"
-              type="video/mp4"
-            />
-          </video>
+          <iframe
+            src={`https://www.youtube.com/embed/${rcratpzhphs}?autoplay=1&rel=0`}
+            title="Speech Video"
+            allow="autoplay; encrypted-media; fullscreen"
+            allowFullScreen
+            className="
+              h-[70vh]
+              w-full
+              max-w-6xl
+              rounded-2xl
+            "
+          />
 
           <a
-            href="/chapters"
+            href="https://perayaan3tahunan.vercel.app/chapters"
             className="
-              absolute
-              bottom-8
-              right-8
+              mt-8
+              rounded-full
               border
               border-white/20
-              px-5
-              py-3
-              text-xs
-              tracking-[0.2em]
+              bg-white/10
+              px-8
+              py-4
+              text-sm
               uppercase
+              tracking-[0.2em]
+              backdrop-blur-md
+              transition
+              hover:bg-white
+              hover:text-black
             "
           >
-            Chapters →
+            Continue to Chapters →
           </a>
         </motion.div>
       )}
