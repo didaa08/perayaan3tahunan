@@ -196,7 +196,7 @@ export default function ScratchCardPage() {
           {/* FOTO */}
 
           <img
-            src="/images/us-final.jpg"
+            src="/images/barcode-gofut.jpg"
             alt="Final Reveal"
             className="
               absolute
