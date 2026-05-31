@@ -1,211 +1,131 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
-const memories = [
-  "/images/memories/01.JPEG",
-  "/images/memories/02.JPEG",
-  "/images/memories/03.JPEG",
-  "/images/memories/04.JPEG",
+const slides = [
+  "3 years.",
+  "1,095 days.",
+  "Thousands of conversations.",
+  "Countless memories.",
+  "I kept thinking...",
+  "How do I fit 3 years into one website?",
+  "Turns out...",
+  "I can't.",
+  "So instead...",
+  "I made this."
 ];
 
 export default function Chapter1Page() {
-  const [openCamera, setOpenCamera] = useState(false);
-  const [current, setCurrent] = useState(0);
+  const [step, setStep] = useState(0);
+  const [showVideo, setShowVideo] = useState(false);
 
-  const nextSlide = () => {
-    setCurrent((prev) => (prev + 1) % memories.length);
-  };
-
-  const prevSlide = () => {
-    setCurrent((prev) =>
-      prev === 0 ? memories.length - 1 : prev - 1
-    );
+  const next = () => {
+    if (step < slides.length - 1) {
+      setStep(step + 1);
+    }
   };
 
   return (
-    <main className="relative h-screen w-full overflow-hidden bg-[#0f0c09] text-white">
+    <main className="relative flex h-screen w-full items-center justify-center overflow-hidden bg-black text-white">
 
-      {/* Background */}
-      <div
-        className="absolute inset-0 bg-cover bg-center scale-105"
-        style={{
-          backgroundImage: "url('/images/background.jpg')",
-        }}
-      />
-
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black/65" />
-
-      {/* Vignette */}
-      <div className="absolute inset-0 bg-black/40 [mask-image:radial-gradient(circle,transparent_35%,black_100%)]" />
-
-      {/* Warm Glow */}
-      <motion.div
-        animate={{
-          opacity: [0.4, 0.55, 0.4],
-        }}
-        transition={{
-          duration: 4,
-          repeat: Infinity,
-        }}
-        className="absolute top-10 right-24 h-[500px] w-[500px] rounded-full bg-orange-200/20 blur-3xl"
-      />
-
-      {/* Title */}
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.5 }}
-        className="absolute left-16 top-14 z-20"
-      >
-        <h1 className="text-7xl font-light tracking-wide">
-          Archive of Us
-        </h1>
-
-        <p className="mt-4 text-sm tracking-wide text-gray-300">
-          some moments never stopped playing.
-        </p>
-      </motion.div>
-
-      {/* CAMERA */}
-      <motion.div
-        whileHover={{
-          scale: 1.06,
-          rotate: -4,
-          y: -8,
-        }}
-        transition={{
-          type: "spring",
-          stiffness: 180,
-        }}
-        onClick={() => setOpenCamera(true)}
-        className="absolute bottom-24 left-10 z-20 cursor-pointer"
-      >
-        <img
-          src="/images/camera.jpg"
-          alt="camera"
-          className="w-[320px] object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.8)]"
-        />
-
-        <p className="mt-4 text-center text-sm tracking-widest text-gray-300 uppercase">
-          camera
-        </p>
-      </motion.div>
-
-      {/* LETTER */}
-      <motion.div
-        whileHover={{
-          scale: 1.05,
-          rotate: 3,
-          y: -8,
-        }}
-        transition={{
-          type: "spring",
-          stiffness: 180,
-        }}
-        className="absolute bottom-24 left-[38%] z-20 cursor-pointer"
-      >
-        <img
-          src="/images/letter.png"
-          alt="letter"
-          className="w-[300px] object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.8)]"
-        />
-
-        <p className="mt-4 text-center text-sm tracking-widest text-gray-300 uppercase">
-          letter
-        </p>
-      </motion.div>
-
-      {/* LAPTOP */}
-      <motion.div
-        whileHover={{
-          scale: 1.04,
-          y: -8,
-        }}
-        transition={{
-          type: "spring",
-          stiffness: 180,
-        }}
-        className="absolute bottom-20 right-8 z-20 cursor-pointer"
-      >
-        <img
-          src="/images/laptop.png"
-          alt="laptop"
-          className="w-[420px] object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.9)]"
-        />
-
-        <p className="mt-4 text-center text-sm tracking-widest text-gray-300 uppercase">
-          future chapters
-        </p>
-      </motion.div>
-
-      {/* Bottom Text */}
-      <div className="absolute bottom-6 left-1/2 z-20 -translate-x-1/2">
-        <p className="text-sm tracking-[0.3em] text-gray-400">
-          best experienced with headphones
-        </p>
-      </div>
-
-      {/* CAMERA MODAL */}
-      <AnimatePresence>
-        {openCamera && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="absolute inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md"
-          >
-
-            {/* Close */}
-            <button
-              onClick={() => setOpenCamera(false)}
-              className="absolute right-10 top-10 text-4xl text-white"
-            >
-              ×
-            </button>
-
-            {/* Previous */}
-            <button
-              onClick={prevSlide}
-              className="absolute left-10 text-5xl text-white"
-            >
-              ←
-            </button>
-
-            {/* Image */}
-            <motion.img
-              key={current}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.4 }}
-              src={memories[current]}
-              alt="memory"
-              className="max-h-[75vh] rounded-xl object-cover shadow-2xl"
-            />
-
-            {/* Next */}
-            <button
-              onClick={nextSlide}
-              className="absolute right-10 text-5xl text-white"
-            >
-              →
-            </button>
-
-            {/* Caption */}
-            <motion.p
+      {!showVideo && (
+        <>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={step}
               initial={{ opacity: 0 }}
-              animate={{ opacity: 0.7 }}
-              className="absolute bottom-16 text-sm tracking-[0.3em] text-gray-300 uppercase"
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.2 }}
+              className="mx-auto max-w-4xl px-8 text-center"
             >
-              our tiny memories
-            </motion.p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              <h1 className="text-3xl font-light md:text-6xl">
+                {slides[step]}
+              </h1>
+            </motion.div>
+          </AnimatePresence>
 
+          <div className="absolute bottom-20">
+            {step < slides.length - 1 ? (
+              <button
+                onClick={next}
+                className="
+                  border
+                  border-white/20
+                  px-8
+                  py-3
+                  text-sm
+                  tracking-[0.3em]
+                  uppercase
+                  transition
+                  hover:bg-white
+                  hover:text-black
+                "
+              >
+                Continue
+              </button>
+            ) : (
+              <button
+                onClick={() => setShowVideo(true)}
+                className="
+                  border
+                  border-white
+                  px-10
+                  py-4
+                  text-sm
+                  tracking-[0.3em]
+                  uppercase
+                  transition
+                  hover:bg-white
+                  hover:text-black
+                "
+              >
+                ▶ Play Message
+              </button>
+            )}
+          </div>
+        </>
+      )}
+
+      {showVideo && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="absolute inset-0 flex items-center justify-center bg-black"
+        >
+          <video
+            autoPlay
+            controls
+            playsInline
+            preload="auto"
+            className="max-h-screen w-auto"
+          >
+            <source
+              src="/videos/chapter1.mp4"
+              type="video/mp4"
+            />
+          </video>
+
+          <a
+            href="/chapters"
+            className="
+              absolute
+              bottom-8
+              right-8
+              border
+              border-white/20
+              px-5
+              py-3
+              text-xs
+              tracking-[0.2em]
+              uppercase
+            "
+          >
+            Chapters →
+          </a>
+        </motion.div>
+      )}
     </main>
   );
 }
