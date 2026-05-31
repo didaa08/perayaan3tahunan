@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-const CELL = 30;
+const CELL = 24;
 
 const cells = [
 
@@ -439,7 +439,7 @@ export default function CrosswordPage() {
         duration-300
       "
     >
-      Tes coba 123 ✨
+      Tes coba 123   ✨
     </a>
   </div>
 )}
